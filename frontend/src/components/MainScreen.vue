@@ -53,6 +53,9 @@
 
       <v-toolbar-title>{{title}}</v-toolbar-title>
       
+      <v-btn @click="toggleComponent('HelloWorld')" icon>
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
       <v-btn @click="toggleComponent('Settings')" icon>
         <v-icon>mdi-cog</v-icon>
       </v-btn>
