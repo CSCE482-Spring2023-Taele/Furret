@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawer">
       <!--  -->
       <v-sheet
-        color="grey-lighten-4"
+        color="grey-lighten-3"
         class="pa-4"
       >
         <v-list>
@@ -35,14 +35,14 @@
 
       <v-toolbar-title>{{title}}</v-toolbar-title>
       
-      <v-btn icon>
+      <v-btn @click="toggleComponent('Settings')" icon>
         <v-icon>mdi-cog</v-icon>
       </v-btn>
     </v-app-bar>
 
     <v-main>
       <!--  -->
-      <HelloWorld />
+      <component v-if="activeComponent" :is="activeComponent"></component>
     </v-main>
   </v-app>
 </template>
@@ -55,10 +55,12 @@
 
 <script>
 import HelloWorld from './HelloWorld.vue'
+import Settings from './SettingsPage.vue'
 
 export default {
   components: {
-    HelloWorld
+    Settings,
+    HelloWorld,
   },
   data: () => ({ 
     drawer: null, 
@@ -81,6 +83,12 @@ export default {
         songs: ['Rex Incognito', 'Swirls of the Stream', 'A Memorable Fancy', 'Moon Like Smile']
       },
     ],
+    activeComponent: 'HelloWorld',
   }),
+  methods: {
+    toggleComponent(componentName) {
+      this.activeComponent = componentName;
+    }
+  },
 }
 </script>
