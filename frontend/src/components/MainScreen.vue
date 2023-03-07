@@ -95,6 +95,10 @@ export default {
     title: "Home",
     folders: [
       { 
+        name: 'Recently uploaded',
+        songs: []
+      },
+      { 
         name: 'Favorites',
         songs: ['Donkey Serenade', 'Never Gonna Give You Up', 'We Are Number One']  
       },
@@ -132,6 +136,7 @@ export default {
     },
     onFileChanged(e) {
         this.selectedFile = e.target.files[0];
+        this.folders[0].songs.push(this.selectedFile.name)
 
         // Do whatever you need with the file, like reading it with FileReader
     },
