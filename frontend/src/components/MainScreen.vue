@@ -26,6 +26,24 @@
           </v-list-item>
         </v-list-group>
       </v-list>
+      <div class="my-button-container">
+        <v-btn 
+            color="primary" 
+            rounded 
+            dark 
+            :loading="isSelecting" 
+            @click="handleFileImport"
+        >
+            Upload Sheet Music
+        </v-btn>
+
+        <input 
+            ref="uploader" 
+            class="d-none" 
+            type="file" 
+            @change="onFileChanged"
+        >
+      </div>
     </v-navigation-drawer>
 
     <v-app-bar
@@ -50,7 +68,14 @@
 <style>
 .nav-btns {
     float: left !important;
-  }
+}
+.my-button-container {
+  position: fixed;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
 </style>
 
 <script>
@@ -84,11 +109,29 @@ export default {
       },
     ],
     activeComponent: 'HelloWorld',
+    isSelecting: false,
+    selectedFile: null
   }),
   methods: {
     toggleComponent(componentName) {
       this.activeComponent = componentName;
-    }
+    },
+    handleFileImport() {
+      this.isSelecting = true;
+
+      // After obtaining the focus when closing the FilePicker, return the button state to normal
+      window.addEventListener('focus', () => {
+          this.isSelecting = false
+      }, { once: true });
+      
+      // Trigger click on the FileInput
+      this.$refs.uploader.click();
+    },
+    onFileChanged(e) {
+        this.selectedFile = e.target.files[0];
+
+        // Do whatever you need with the file, like reading it with FileReader
+    },
   },
 }
 </script>
