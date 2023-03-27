@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawer">
       <!--  -->
       <v-sheet
-        color="grey-lighten-3"
+        color="grey-lighten-4"
         class="pa-4"
       >
         <v-list>
@@ -14,36 +14,39 @@
           ></v-list-item>
         </v-list>
       </v-sheet>
+      <v-divider />
       <v-list>
+        <v-list-item prepend-icon="mdi-home" title="Home" v-bind="props" @click="goHome()" link></v-list-item>
         <v-list-group v-for="folder in folders" :key="folder.name" :value="folder.name">
           <template v-slot:activator="{ props }">
             <v-list-item
               v-bind="props"
             >{{folder.name}}</v-list-item>
           </template> 
-          <v-list-item v-for="(song, i) in folder.songs" :key="i" link>
-              <v-list-item-title v-text="song"></v-list-item-title>
+          <v-list-item v-for="(song, i) in folder.songs" :key="i" @click="setSongId(song[0])" link>
+              <v-list-item-title v-text="song[0]"></v-list-item-title>
           </v-list-item>
         </v-list-group>
       </v-list>
-      <div class="my-button-container">
-        <v-btn 
-            color="primary" 
-            rounded 
-            dark 
-            :loading="isSelecting" 
-            @click="handleFileImport"
-        >
-            Upload Sheet Music
-        </v-btn>
-
-        <input 
+      <template v-slot:append>
+        <v-divider />
+        <div class="pa-2">
+          <v-btn block
+          color="#BB86FC"
+          prepend-icon="mdi-cloud-upload"
+          :loading="isSelecting" 
+          @click="handleFileImport"
+          >
+            Upload
+          </v-btn>
+          <input 
             ref="uploader" 
             class="d-none" 
             type="file" 
             @change="onFileChanged"
-        >
-      </div>
+          >
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar
@@ -53,17 +56,14 @@
 
       <v-toolbar-title>{{title}}</v-toolbar-title>
       
-      <v-btn @click="toggleComponent('HelloWorld')" icon>
-        <v-icon>mdi-home</v-icon>
-      </v-btn>
-      <v-btn @click="toggleComponent('Settings')" icon>
+      <v-btn icon @click="swapPage('settings')">
         <v-icon>mdi-cog</v-icon>
       </v-btn>
     </v-app-bar>
 
     <v-main>
       <!--  -->
-      <component v-if="activeComponent" :is="activeComponent"></component>
+      <component :is="currentView" v-bind="songid" />
     </v-main>
   </v-app>
 </template>
@@ -71,57 +71,77 @@
 <style>
 .nav-btns {
     float: left !important;
-}
-.my-button-container {
-  position: fixed;
-  bottom: 5px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-}
+  }
 </style>
 
 <script>
-import HelloWorld from './HelloWorld.vue'
+import HelloWorld from './HelloWorld.vue';
+import HomeComponent from './HomeComponent.vue';
+import SongScreenComponent from './SongScreenComponent.vue';
 import Settings from './SettingsPage.vue'
+
+const routes = {
+  '/': HomeComponent,
+  '/helloworld': HelloWorld,
+  '/song': SongScreenComponent,
+  '/settings': Settings,
+}
+
 
 export default {
   components: {
-    Settings,
     HelloWorld,
+    HomeComponent,
+    SongScreenComponent,
+    Settings,
   },
   data: () => ({ 
+    currentPath: window.location.hash,
     drawer: null, 
     title: "Home",
+    songid: null,
     folders: [
       { 
-        name: 'Recently uploaded',
-        songs: []
-      },
-      { 
         name: 'Favorites',
-        songs: ['Donkey Serenade', 'Never Gonna Give You Up', 'We Are Number One']  
+        songs: [['So This Is Love', 'Cinderella-SO-THIS-IS-LOVE-01.gif'], ['Dreidel', 'Dreidel-sheet-music-with-chords.jpg']]
       },
       { 
         name: 'Bangers',
-        songs: ['Shooting Stars', 'Into the Night', 'Take On Me', 'Roundabout', 'Megalovania']
-      },
-      { 
-        name: 'Classical',
-        songs: ['Moonlight Sonata', 'Turkish March', 'Croatian Rhapsody']
+        songs: [['Glimpse of Us', 'Glimpse_of_us_jpg-1.jpg']]
       },
       { 
         name: 'Akash\'s Genshin Stash',
-        songs: ['Rex Incognito', 'Swirls of the Stream', 'A Memorable Fancy', 'Moon Like Smile']
+        songs: [['Albedo Cutscene', 'Albedo.jpg'], ['Dragonspine', 'dragonspine.jpg'], ['Eternal Oasis', 'Genshin.jpg']]
       },
     ],
-    activeComponent: 'HelloWorld',
     isSelecting: false,
-    selectedFile: null
+    selectedFile: null,
   }),
+  computed: {
+    currentView() {
+      return routes[this.currentPath.slice(1) || '/']
+    }
+  },
+  mounted() {
+    window.addEventListener('hashchange', () => {
+      this.currentPath = window.location.hash
+		})
+  },
   methods: {
-    toggleComponent(componentName) {
-      this.activeComponent = componentName;
+    swapPage: function(pagename) {
+      this.songid = { songid: null }
+      window.location.href = '#/' + pagename
+      this.title = "Settings"
+    },
+    setSongId: function(sid) {
+      this.songid = { songid: sid }
+      window.location.href = '#/song'
+      this.title = sid
+    },
+    goHome() {
+      this.songid = { songid: null }
+      window.location.href = '#/'
+      this.title = "Home"
     },
     handleFileImport() {
       this.isSelecting = true;
@@ -133,12 +153,6 @@ export default {
       
       // Trigger click on the FileInput
       this.$refs.uploader.click();
-    },
-    onFileChanged(e) {
-        this.selectedFile = e.target.files[0];
-        this.folders[0].songs.push(this.selectedFile.name)
-
-        // Do whatever you need with the file, like reading it with FileReader
     },
   },
 }
