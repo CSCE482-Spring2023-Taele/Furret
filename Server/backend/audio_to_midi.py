@@ -1,22 +1,42 @@
-# testing audio to midi conversion
-# import librosa 
-# audio_data, sample_rate = librosa.load('audio_file.wav')
+import librosa
+import numpy as np
+import math
+import pretty_midi
 
-# from librosa.core import piptrack
-# pitch, magnitude = piptrack(audio_data, sr=sample_rate, fmin=50, fmax=2000)
+# Load audio file using librosa
+y, sr = librosa.load('Dragonspine.wav')
 
-from midiutil.MidiFile import MIDIFile
-midi = MIDIFile(numTracks=1)
-track = 0
-time = 0
-channel = 0
-volume = 100
-midi.addTrackName(track, time, "Track")
-midi.addTempo(track, time, 120)
-for i in range(len(pitch)):
-    pitch_value = int(round(pitch[i]))
-    if pitch_value != -1:
-        time += 1
-        midi.addNote(track, channel, pitch_value, time, 1, volume)
-with open("output.mid", "wb") as output_file:
-    midi.writeFile(output_file)
+# Extract pitch information using librosa
+pitches, magnitudes = librosa.core.piptrack(y=y, sr=sr)
+
+# Set a threshold to filter out pitches with low magnitudes
+threshold = np.mean(magnitudes) * 0.5
+pitches[magnitudes < threshold] = 0
+
+# Convert pitch information to MIDI notes
+midi_notes = []
+for pitch in pitches:
+    if np.max(pitch) == 0:
+        midi_note = None
+    else:
+        midi_note = int(round(69 + 12 * math.log2(np.argmax(pitch) / 440.0)))
+    midi_notes.append(midi_note)
+
+# Create a MIDI file using pretty_midi
+midi = pretty_midi.PrettyMIDI()
+piano = pretty_midi.Instrument(program=0)
+start_time = 0
+for note in midi_notes:
+    if note is None:
+        start_time += 0.01
+    else:
+        end_time = start_time + 0.01
+        piano.notes.append(pretty_midi.Note(
+            velocity=100,
+            pitch=note,
+            start=start_time,
+            end=end_time
+        ))
+        start_time = end_time
+midi.instruments.append(piano)
+midi.write('output.mid')
