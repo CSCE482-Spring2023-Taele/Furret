@@ -35,4 +35,8 @@ for note in midi_notes:
             velocity=100,
             pitch=note,
             start=start_time,
-
+            end=end_time
+        ))
+        start_time = end_time
+midi.instruments.append(piano)
+midi.write('output.mid')
