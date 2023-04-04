@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1 style="display: flex; justify-content: center;">{{songid}}</h1>
+    <h1 style="display: flex; justify-content: center;">{{path.path}}</h1>
     <v-flex class="my-flex">
         <div class="text-center">
           <v-card class="d-flex align-center justify-center" style="width: 100%;">
@@ -20,38 +20,47 @@
         <v-btn icon="mdi-play" color="primary"></v-btn>
       </v-card-actions>
       <v-card-actions class="justify-center" style="margin-top: 1%;">
-        <v-btn color="primary">View Sheet Music</v-btn>
+        <v-btn color="primary" v-on:click="toggle">{{ button_name }}</v-btn>
       </v-card-actions>
     </div>
-    <v-table
-      theme="dark"
-      fixed-header
-      height="300px"
-      style="margin-left: 3%; margin-right: 3%;"
-    >
-      <thead>
-        <tr>
-          <th class="text-left">
-            Past Results
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="item in desserts"
-          :key="item.name"
-        >
-          <td>{{ item.name }}</td>
-        </tr>
-      </tbody>
-    </v-table>
+    <component :is="component" :path="pathSong"/>
   </div>
 </template>
 
 <script>
+import SheetMusicViewer from "./SheetMusicViewer.vue";
+import ResultsTable from "./ResultsTable.vue";
+
 export default {
   name: 'SongScreenComponent',
-  props: ['songid'],
+  props: {
+     songid: String,
+     path: String
+  },
+  components: {
+    SheetMusicViewer,
+    ResultsTable
+  },
+  data (){
+    return {
+      component: ResultsTable,
+      button_name: "View Sheet Music",
+      pathSong: null,
+    }
+  },
+  methods: {
+    toggle(){
+      if (this.component.name === "SheetMusicViewer") {
+        this.component = ResultsTable;
+        this.button_name = "View Sheet Music";
+        this.pathSong = null;
+      } else {
+        this.component = SheetMusicViewer;
+        this.button_name = "See Results";
+        this.pathSong = this.path;
+      }
+    },
+  }
 }
 </script>
 

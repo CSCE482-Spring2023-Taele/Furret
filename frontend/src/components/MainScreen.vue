@@ -23,7 +23,7 @@
               v-bind="props"
             >{{folder.name}}</v-list-item>
           </template> 
-          <v-list-item v-for="(song, i) in folder.songs" :key="i" @click="setSongId(song[0])" link>
+          <v-list-item v-for="(song, i) in folder.songs" :key="i" @click="setSongId(song[0], song[1])" link>
               <v-list-item-title v-text="song[0]"></v-list-item-title>
           </v-list-item>
         </v-list-group>
@@ -63,7 +63,7 @@
 
     <v-main>
       <!--  -->
-      <component :is="currentView" v-bind="songid" />
+      <component :is="currentView" :songid="songid" :path="pathMainScreen" :key="component_reload"/>
     </v-main>
   </v-app>
 </template>
@@ -75,14 +75,12 @@
 </style>
 
 <script>
-import HelloWorld from './HelloWorld.vue';
 import HomeComponent from './HomeComponent.vue';
 import SongScreenComponent from './SongScreenComponent.vue';
 import Settings from './SettingsPage.vue'
 
 const routes = {
   '/': HomeComponent,
-  '/helloworld': HelloWorld,
   '/song': SongScreenComponent,
   '/settings': Settings,
 }
@@ -90,16 +88,17 @@ const routes = {
 
 export default {
   components: {
-    HelloWorld,
     HomeComponent,
     SongScreenComponent,
     Settings,
   },
-  data: () => ({ 
+  data: () => ({
     currentPath: window.location.hash,
     drawer: null, 
     title: "Home",
     songid: null,
+    pathMainScreen: null,
+    component_reload: 0,
     folders: [
       { 
         name: 'Favorites',
@@ -132,16 +131,20 @@ export default {
       this.songid = { songid: null }
       window.location.href = '#/' + pagename
       this.title = "Settings"
+      this.pathMainScreen = {path: null}
     },
-    setSongId: function(sid) {
+    setSongId: function(sid, pathSongScreen) {
       this.songid = { songid: sid }
       window.location.href = '#/song'
       this.title = sid
+      this.pathMainScreen = {path: pathSongScreen}
+      this.component_reload++;
     },
     goHome() {
       this.songid = { songid: null }
       window.location.href = '#/'
       this.title = "Home"
+      this.pathMainScreen = {path: null}
     },
     handleFileImport() {
       this.isSelecting = true;
