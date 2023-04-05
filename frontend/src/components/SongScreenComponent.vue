@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1 style="display: flex; justify-content: center;">{{path.path}}</h1>
+    <h1 style="display: flex; justify-content: center;">{{songid.songid}}</h1>
     <v-flex class="my-flex">
         <div class="text-center">
           <v-card class="d-flex align-center justify-center" style="width: 100%;">
