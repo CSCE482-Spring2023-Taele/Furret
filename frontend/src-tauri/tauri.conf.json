@@ -4,7 +4,8 @@
     "beforeBuildCommand": "vue-cli-service build",
     "beforeDevCommand": "vue-cli-service serve",
     "devPath": "Set automatically by Vue CLI plugin",
-    "distDir": "Set automatically by Vue CLI plugin"
+    "distDir": "Set automatically by Vue CLI plugin",
+    "withGlobalTauri": true
   },
   "package": {
     "productName": "virtualoso",
