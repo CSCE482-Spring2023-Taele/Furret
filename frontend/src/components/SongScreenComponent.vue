@@ -17,7 +17,9 @@
     </v-flex>
     <div class="row">
       <v-card-actions class="justify-center" style="margin-top: 1%;">
-        <v-btn icon="mdi-play" color="primary"></v-btn>
+        <v-btn color="primary" v-on:click="playAudio">
+          <v-icon>{{ button }}</v-icon>
+        </v-btn>
       </v-card-actions>
       <v-card-actions class="justify-center" style="margin-top: 1%;">
         <v-btn color="primary" v-on:click="toggle">{{ button_name }}</v-btn>
@@ -30,6 +32,10 @@
 <script>
 import SheetMusicViewer from "./SheetMusicViewer.vue";
 import ResultsTable from "./ResultsTable.vue";
+import sound from '../assets/sample.mp3'
+
+const mytrack = new Audio(sound);
+mytrack.crossOrigin = 'anonymous';
 
 export default {
   name: 'SongScreenComponent',
@@ -46,6 +52,8 @@ export default {
       component: ResultsTable,
       button_name: "View Sheet Music",
       pathSong: null,
+      audio_var: false,
+      button: "mdi-play"
     }
   },
   methods: {
@@ -60,6 +68,18 @@ export default {
         this.pathSong = this.path;
       }
     },
+    playAudio() {
+      if (this.audio_var == false) {
+        mytrack.play();
+        this.button = "mdi-pause"
+        this.audio_var = true;
+      } else {
+        mytrack.pause()
+        this.button = "mdi-play"
+        mytrack.currentTime = 0;
+        this.audio_var = false;
+      }
+    }
   }
 }
 </script>
