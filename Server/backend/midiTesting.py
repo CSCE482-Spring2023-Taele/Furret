@@ -66,7 +66,9 @@ def musicDataOuput(userData : list, sMusData : list, simScore: float, outFile = 
         output += label + "\n"
         output += f"Size = {len(midiSet)}\n"
         output += "StartTime EndTime Note Velocity\n"
-        for note in midiSet: output += " ".join(map(str, note)) + "\n"
+        for note in midiSet: 
+            note[2] = midi_to_note[note[2]] # Covnerts numerical note (1...127) to letter note.
+            output += " ".join(map(str, note)) + "\n"
         output += "\n"
 
     output += f"Similarity Score = {simScore:.10f}"
