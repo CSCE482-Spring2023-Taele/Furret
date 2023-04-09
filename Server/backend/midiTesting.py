@@ -51,16 +51,32 @@ def midiComp(notes1 : list, notes2 : list):
     similarity_score = l2Norm(val1, val2)
     return similarity_score
 
-def musicDataOuput(userData : list, sMusData : list, outFile = "output.txt"):
+def musicDataOuput(userData : list, sMusData : list, simScore: float, outFile = "output.txt"):
     """This function writes out midi Data, similiraity scores, and intelligent feedback to a .txt file.
 
 
     Args:
         userData (list): user music data, where userData[i] = [startTime, endTime, note, velocity]
         sMusData (list): sheet music data, where sMusData[i] = [startTime, endTime, note, velocity]
-        outFile (str, optional): Name of output text file. Defaults to "output.txt".
+        simScore (float): Similarity score between both userData nad sMusData.
+        outFile (str, optional): File Path to output text file. Defaults to "output.txt".
     """
+    output = ""
+    for label, midiSet in [("User Music Data", userData), ("Sheet Music Data", sMusData)]:
+        output += label + "\n"
+        output += f"Size = {len(midiSet)}\n"
+        output += "StartTime EndTime Note Velocity\n"
+        for note in midiSet: output += " ".join(map(str, note)) + "\n"
+        output += "\n"
+
+    output += f"Similarity Score = {simScore:.10f}"
+
+    with open(outFile, "w") as file:
+        file.write(output)
+        file.flush()  # Potential issues could rise with concurrency, so flush forces the output to be written to disk
+    
     return
+
 
 def processMidiFiles(midiFile : str, accThreshold = 10):
     """This processes a midi file and extracts timing data, note data, and velocity.
@@ -93,5 +109,7 @@ userinput_file_path = 'midi_files/Criminal_1.mid'
 sheetmusic_file_path = 'midi_files/criminal_2.mid'
 
 notes1, notes2 = processMidiFiles(userinput_file_path), processMidiFiles(sheetmusic_file_path)
-print(midiComp(notes1, notes2))
+simScore = midiComp(notes1, notes2)
+
+musicDataOuput(notes1, notes2, simScore)
 
