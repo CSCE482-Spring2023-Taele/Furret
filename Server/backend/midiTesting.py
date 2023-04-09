@@ -1,5 +1,6 @@
 import mido
-import numpy as np    
+import numpy as np
+import sys    
 
 midi_to_note = {12: 'C0', 13: 'C#0', 14: 'D0', 15: 'Eb0', 16: 'E0', 17: 'F0', 18: 'F#0', 19: 'G0', 20: 'Ab0', 
                 21: 'A0', 22: 'Bb0', 23: 'B0', 24: 'C1', 25: 'C#1', 26: 'D1', 27: 'Eb1', 28: 'E1', 29: 'F1', 
@@ -79,7 +80,6 @@ def musicDataOuput(userData : list, sMusData : list, simScore: float, outFile = 
     
     return
 
-
 def processMidiFiles(midiFile : str, accThreshold = 10):
     """This processes a midi file and extracts timing data, note data, and velocity.
 
@@ -107,11 +107,16 @@ def processMidiFiles(midiFile : str, accThreshold = 10):
     
     return notes
 
-userinput_file_path = 'midi_files/Criminal_1.mid'
-sheetmusic_file_path = 'midi_files/criminal_2.mid'
 
-notes1, notes2 = processMidiFiles(userinput_file_path), processMidiFiles(sheetmusic_file_path)
-simScore = midiComp(notes1, notes2)
+def main():
+    userinput_file_path =  sys.argv[1] # 'midi_files/Criminal_1.mid'
+    sheetmusic_file_path = sys.argv[2] # 'midi_files/criminal_2.mid'
+    notes1, notes2 = processMidiFiles(userinput_file_path), processMidiFiles(sheetmusic_file_path)
+    simScore = midiComp(notes1, notes2)
 
-musicDataOuput(notes1, notes2, simScore)
+    musicDataOuput(notes1, notes2, simScore)
+
+
+if __name__ == "__main__":
+    main()
 
