@@ -52,11 +52,30 @@ def midiComp(file1, file2):
     similarity_score = l2Norm(notes1, notes2)
     return similarity_score
 
-def musicDataOuput(list1, list2):
-    pass
+def musicDataOuput(userData : list, sMusData : list, outFile = "output.txt"):
+    """This function writes out midi Data, similiraity scores, and intelligent feedback to a .txt file.
 
-def processMidiFiles(file1, file2):
-    pass
+
+    Args:
+        userData (list): user music data, where userData[i] = [startTime, endTime, note, velocity]
+        sMusData (list): sheet music data, where sMusData[i] = [startTime, endTime, note, velocity]
+        outFile (str, optional): Name of output text file. Defaults to "output.txt".
+    """
+    return
+
+def processMidiFiles(midiFile : str):
+    """This processes a midi file and extracts timing data, note data, and velocity.
+
+    Args:
+        midiFile (str): name of midi file
+
+    Returns:
+        notes (list): returns list with each element of the form [startTime, endTime, note, velocity]
+    """
+    notes = []
+    
+
+    return notes
 
 original_file_path = 'midi_files/Criminal_1.mid'
 generated_file_path = 'midi_files/criminal_2.mid'
