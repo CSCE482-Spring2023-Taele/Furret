@@ -29,27 +29,26 @@ def l2Norm(list1, list2):
     distance /= np.sqrt(v1Mag) * np.sqrt(v2Mag)
     return distance
 
-def midiComp(file1, file2):
+def midiComp(notes1 : list, notes2 : list):
+    """Compares the user performance with the sheet music midi.
 
-    # Load midi files
-    mid1 = mido.MidiFile(file1)
-    mid2 = mido.MidiFile(file2)
+    Args:
+        notes1 (list): Contains information from User Performance midi
+        notes2 (list): Contains information from Sheet Music midi
 
-    # Extract notes from midi files and group adjacent pitches together
-    notes1 = []
-    notes2 = []
-
-    for notes, midi in [(notes1, mid1), (notes2, mid2)]:
-        for msg in mido.merge_tracks(midi.tracks):
-            if 'note_on' in msg.type:
-                # print(msg.note, msg.velocity, msg.time)
-                pitch, vel, time = msg.note, msg.velocity, msg.time
-                print(msg)
-                if notes and pitch == notes[-1][-1] + 1: notes[-1].append(pitch) # Append pitch to last group
-                else: notes.append([pitch]) # Create new group for pitch
+    Returns:
+        float: Returns the similarity score between user performance and sheet music.
+    """
+    val1, val2 = [], []
+    for val, notes in [(val1, notes1), (val2, notes2)]:
+        # print(msg.note, msg.velocity, msg.time)
+        for note in notes:
+            time, pitch, vel = note[1]-note[0], note[2], note[3]
+            if val and pitch == val[-1][-1] + 1: val[-1].append(pitch) # Append pitch to last group
+            else: val.append([pitch]) # Create new group for pitch
 
     # Calculate similarity for each group of pitches
-    similarity_score = l2Norm(notes1, notes2)
+    similarity_score = l2Norm(val1, val2)
     return similarity_score
 
 def musicDataOuput(userData : list, sMusData : list, outFile = "output.txt"):
@@ -63,24 +62,36 @@ def musicDataOuput(userData : list, sMusData : list, outFile = "output.txt"):
     """
     return
 
-def processMidiFiles(midiFile : str):
+def processMidiFiles(midiFile : str, accThreshold = 10):
     """This processes a midi file and extracts timing data, note data, and velocity.
 
     Args:
-        midiFile (str): name of midi file
+        midiFile (str): Path to the midi file
+        accThreshold (int, optional): Time threshold for accidental note being played 
 
     Returns:
         notes (list): returns list with each element of the form [startTime, endTime, note, velocity]
     """
     notes = []
-    
 
+    midi = mido.MidiFile(midiFile) # Load midi file
+    deltaT = 0
+    for msg in mido.merge_tracks(midi.tracks):
+        if 'note_on' in msg.type:
+            pitch, force, time = msg.note, msg.velocity, msg.time
+            # print(msg)
+            if time <= accThreshold: # Checks if note is accidental
+                deltaT += time # Need to add to the time to the offset
+                continue # Don't add accidental note to the list of notes played
+
+            notes.append([deltaT, deltaT + time, pitch, force])
+            deltaT += time
+    
     return notes
 
-original_file_path = 'midi_files/Criminal_1.mid'
-generated_file_path = 'midi_files/criminal_2.mid'
+userinput_file_path = 'midi_files/Criminal_1.mid'
+sheetmusic_file_path = 'midi_files/criminal_2.mid'
 
-similarity = midiComp(original_file_path,generated_file_path)
+notes1, notes2 = processMidiFiles(userinput_file_path), processMidiFiles(sheetmusic_file_path)
+print(midiComp(notes1, notes2))
 
-
-print(similarity)
