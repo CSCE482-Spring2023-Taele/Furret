@@ -90,4 +90,4 @@ StartTime EndTime Note Velocity
 21600 22079 D4 0
 22080 23039 C4 0
 
-Similarity Score = 0.0000057069
+Similarity Score = 0.9999972062

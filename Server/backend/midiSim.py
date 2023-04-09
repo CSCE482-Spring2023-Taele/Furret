@@ -31,13 +31,11 @@ class MidiSim():
 
     def l2Norm(self, list1, list2):
         distance = 0
-        v1Mag, v2Mag = 0, 0 
+        v1Mag = sum([sum([x**2 for x in row]) for row in list1])
+        v2Mag = sum([sum([x**2 for x in row]) for row in list2])
         for sub1, sub2 in zip(list1, list2):
             sub_distance = 0
-            for x, y in zip(sub1, sub2):
-                sub_distance += abs(x - y)
-                v1Mag += x**2
-                v2Mag += y**2
+            for x, y in zip(sub1, sub2): sub_distance += x*y
             distance += sub_distance
         distance /= np.sqrt(v1Mag) * np.sqrt(v2Mag)
         return distance
