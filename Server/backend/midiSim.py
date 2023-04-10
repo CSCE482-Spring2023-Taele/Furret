@@ -18,7 +18,7 @@ midi_to_note = {12: 'C0', 13: 'C#0', 14: 'D0', 15: 'Eb0', 16: 'E0', 17: 'F0', 18
                 118: 'Bb8', 119: 'B8', 120: 'C9', 121: 'C#9', 122: 'D9', 123: 'Eb9', 124: 'E9', 125: 'F9', 
                 126: 'F#9', 127: 'G9'}
 
-class MidiSim():
+class MidiSim:
     def __init__(self, ui_fp : str, sm_fp : str):
         self.userinput_file_path =  ui_fp # 'midi_files/Criminal_1.mid'
         self.sheetmusic_file_path = sm_fp # 'midi_files/criminal_2.mid
