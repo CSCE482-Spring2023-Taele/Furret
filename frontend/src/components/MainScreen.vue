@@ -17,6 +17,7 @@
       <v-divider />
       <v-list>
         <v-list-item prepend-icon="mdi-home" title="Home" v-bind="props" @click="goHome()" link></v-list-item>
+      <!--
         <v-list-group v-for="folder in folders" :key="folder.name" :value="folder.name">
           <template v-slot:activator="{ props }">
             <v-list-item
@@ -27,6 +28,10 @@
               <v-list-item-title v-text="song[0]"></v-list-item-title>
           </v-list-item>
         </v-list-group>
+        -->
+        <v-list-item v-for="(song, i) in songs" :key="i" @click="setSongId(song.name, song.path)" link>
+            <v-list-item-title v-text="song.name"></v-list-item-title>
+        </v-list-item>
       </v-list>
       <template v-slot:append>
         <v-divider />
@@ -112,6 +117,16 @@ export default {
       { 
         name: 'Akash\'s Genshin Stash',
         songs: [['Albedo Cutscene', 'Albedo.jpg'], ['Dragonspine', 'dragonspine.jpg'], ['Eternal Oasis', 'Genshin.jpg']]
+      },
+    ],
+    songs: [
+      {
+        name: 'blah 1',
+        path: 'Cinderella-SO-THIS-IS-LOVE-01.gif'
+      },
+      {
+        name: 'blah 2',
+        path: 'Glimpse_of_us_jpg-1.jpg'
       },
     ],
     isSelecting: false,
