@@ -78,6 +78,7 @@
 import HomeComponent from './HomeComponent.vue';
 import SongScreenComponent from './SongScreenComponent.vue';
 import Settings from './SettingsPage.vue'
+import Database from "tauri-plugin-sql-api";
 
 const routes = {
   '/': HomeComponent,
@@ -125,6 +126,7 @@ export default {
     window.addEventListener('hashchange', () => {
       this.currentPath = window.location.hash
 		})
+    this.folders = this.getSongData();
   },
   methods: {
     swapPage: function(pagename) {
@@ -156,6 +158,15 @@ export default {
       
       // Trigger click on the FileInput
       this.$refs.uploader.click();
+    },
+    async getSongData() {
+      console.log("testing testing");
+      const db = await Database.load("sqlite:data.db");
+      //db.execute("CREATE TABLE temp_test( foldername Varchar, songs Varchar );");
+      //db.execute("INSERT INTO temp_test VALUES('binga', 'bonga');");
+      var q_result = db.select("SELECT * FROM temp_test;").then((response) => {this.folders = response; console.log(response)});
+      console.log(q_result);
+      return "";
     },
   },
 }
