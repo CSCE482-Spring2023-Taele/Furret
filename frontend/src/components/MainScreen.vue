@@ -141,7 +141,7 @@ export default {
     window.addEventListener('hashchange', () => {
       this.currentPath = window.location.hash
 		})
-    this.folders = this.getSongData();
+    this.getSongData();
   },
   methods: {
     swapPage: function(pagename) {
@@ -177,9 +177,14 @@ export default {
     async getSongData() {
       console.log("testing testing");
       const db = await Database.load("sqlite:data.db");
-      //db.execute("CREATE TABLE temp_test( foldername Varchar, songs Varchar );");
-      //db.execute("INSERT INTO temp_test VALUES('binga', 'bonga');");
-      var q_result = db.select("SELECT * FROM temp_test;").then((response) => {this.folders = response; console.log(response)});
+      //db.execute("CREATE TABLE songs_table( name Varchar, path Varchar );");
+      //db.execute("INSERT INTO songs_table VALUES('So This Is Love', 'Cinderella-SO-THIS-IS-LOVE-01.gif');");
+      //db.execute("INSERT INTO songs_table VALUES('Dreidel', 'Dreidel-sheet-music-with-chords.jpg');");
+      //db.execute("INSERT INTO songs_table VALUES('Glimpse of Us', 'Glimpse_of_us_jpg-1.jpg');");
+      //db.execute("INSERT INTO songs_table VALUES('Albedo Cutscene', 'Albedo.jpg');");
+      //db.execute("INSERT INTO songs_table VALUES('Dragonspine', 'dragonspine.jpg');");
+      //db.execute("INSERT INTO songs_table VALUES('Eternal Oasis', 'Genshin.jpg');");
+      var q_result = db.select("SELECT * FROM songs_table;").then((response) => {this.songs = response; console.log(response)});
       console.log(q_result);
       return "";
     },

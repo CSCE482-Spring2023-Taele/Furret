@@ -25,7 +25,7 @@
         <v-btn color="primary" v-on:click="toggle">{{ button_name }}</v-btn>
       </v-card-actions>
     </div>
-    <component :is="component" :path="pathSong"/>
+    <component :is="component" :songid="songid" :path="pathSong"/>
   </div>
 </template>
 
