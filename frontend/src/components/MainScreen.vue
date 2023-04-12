@@ -84,6 +84,8 @@ import HomeComponent from './HomeComponent.vue';
 import SongScreenComponent from './SongScreenComponent.vue';
 import Settings from './SettingsPage.vue'
 import Database from "tauri-plugin-sql-api";
+import { open } from '@tauri-apps/api/dialog';
+import { copyFile, BaseDirectory } from '@tauri-apps/api/fs';
 
 const routes = {
   '/': HomeComponent,
@@ -163,7 +165,8 @@ export default {
       this.title = "Home"
       this.pathMainScreen = {path: null}
     },
-    handleFileImport() {
+    async handleFileImport() {
+      /*
       this.isSelecting = true;
 
       // After obtaining the focus when closing the FilePicker, return the button state to normal
@@ -173,6 +176,38 @@ export default {
       
       // Trigger click on the FileInput
       this.$refs.uploader.click();
+      */
+      const selected = await open({
+        multiple: true,
+        filters: [{
+          name: 'Image',
+          extensions: ['png', 'jpeg']
+        }]
+      });
+      if (Array.isArray(selected)) {
+        // user selected multiple files
+        console.log("multiple");
+        console.log(selected);
+        for(let i = 0; i < selected.length; i++) {
+          let newSong = selected.at(i);
+          console.log(newSong);
+          let newName = newSong.split(/(\\|\/)/g).pop().replace(/\.[^/.]+$/, "");
+          console.log(newName);
+          //const contents = await readBinaryFile(newSong);
+          //await writeBinaryFile('$APP/public/assets/sheets/'+newSong.split(/(\\|\/)/g).pop(), contents);
+          //await writeBinaryFile(newSong.split(/(\\|\/)/g).pop(), contents, {dir: BaseDirectory});
+          let targetDir = "resources/sheets/"+newSong.split(/(\\|\/)/g).pop();
+          await copyFile(newSong, targetDir, {dir: BaseDirectory.appLocalDataDir});
+          this.uploadNewSong(newName, newSong.split(/(\\|\/)/g).pop());
+          //this.getSongData();
+        }
+      } else if (selected === null) {
+        // user cancelled the selection
+        console.log("cancelled");
+      } else {
+        // user selected a single file
+        console.log("single");
+      }
     },
     async getSongData() {
       console.log("testing testing");
@@ -187,6 +222,12 @@ export default {
       var q_result = db.select("SELECT * FROM songs_table;").then((response) => {this.songs = response; console.log(response)});
       console.log(q_result);
       return "";
+    },
+    async uploadNewSong(newSongName, newSongPath) {
+      const db = await Database.load("sqlite:data.db");
+      console.log(newSongPath);
+      db.execute("INSERT INTO songs_table VALUES('" + newSongName + "', '" + newSongPath + "');");
+      //db.execute("INSERT INTO songs_table VALUES('Kashmirga', 'Genshin.jpg');");
     },
   },
 }

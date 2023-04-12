@@ -12,7 +12,7 @@
         },
         computed: {
             imageSrc() {
-                return require('../assets/sheets/'+ this.path.path);
+                return require('../../src-tauri/resources/sheets/'+ this.path.path);
             }
         }
     }
