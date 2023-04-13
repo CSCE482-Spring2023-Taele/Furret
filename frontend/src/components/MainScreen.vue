@@ -58,7 +58,7 @@
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>{{title}}</v-toolbar-title>
+      <v-toolbar-title></v-toolbar-title>
       
       <v-btn icon @click="swapPage('settings')">
         <v-icon>mdi-cog</v-icon>
@@ -83,7 +83,7 @@ import HomeComponent from './HomeComponent.vue';
 import SongScreenComponent from './SongScreenComponent.vue';
 import Settings from './SettingsPage.vue'
 import Database from "tauri-plugin-sql-api";
-import { open } from '@tauri-apps/api/dialog';
+import{ open } from '@tauri-apps/api/dialog';
 import { copyFile, BaseDirectory } from '@tauri-apps/api/fs';
 
 const routes = {
@@ -102,7 +102,6 @@ export default {
   data: () => ({
     currentPath: window.location.hash,
     drawer: null, 
-    title: "Home",
     songid: null,
     songname: "Default",
     pathMainScreen: null,
@@ -152,14 +151,12 @@ export default {
       this.songid = { songid: null }
       this.songname = { songname: null }
       window.location.href = '#/' + pagename
-      this.title = "Settings"
       this.pathMainScreen = {path: null}
     },
     setSongId: function(sid, sname, pathSongScreen) {
       this.songid = { songid: sid }
       this.songname = { songname: sname}
       window.location.href = '#/song'
-      this.title = sname
       this.pathMainScreen = {path: pathSongScreen}
       this.component_reload++;
     },
@@ -167,7 +164,6 @@ export default {
       this.songid = { songid: null }
       this.songname = { songname: null }
       window.location.href = '#/'
-      this.title = "Home"
       this.pathMainScreen = {path: null}
     },
     async handleFileImport() {
