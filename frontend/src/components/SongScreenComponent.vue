@@ -33,6 +33,7 @@
 import SheetMusicViewer from "./SheetMusicViewer.vue";
 import ResultsTable from "./ResultsTable.vue";
 import sound from '../assets/sample.mp3'
+import Database from "tauri-plugin-sql-api";
 
 const mytrack = new Audio(sound);
 mytrack.crossOrigin = 'anonymous';
@@ -58,6 +59,9 @@ export default {
       highscore: 0,
     }
   },
+  mounted() {
+    this.setHighScore();
+  },
   methods: {
     toggle(){
       if (this.component.name === "SheetMusicViewer") {
@@ -81,6 +85,15 @@ export default {
         mytrack.currentTime = 0;
         this.audio_var = false;
       }
+    },
+    async setHighScore() {
+      const db = await Database.load("sqlite:data.db");
+      db.select("SELECT MAX(score) FROM scores_table WHERE song = '" + this.songid.songid + "';").then((response) => {
+        if(response[0]["MAX(score)"] != null) { 
+          this.highscore=response[0]["MAX(score)"]; 
+        } 
+        console.log(response)
+      });
     }
   }
 }

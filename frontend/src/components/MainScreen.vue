@@ -9,8 +9,7 @@
         <v-list>
           <v-list-item
             prepend-avatar="http://cdn.shopify.com/s/files/1/1419/7120/products/Lycoris_Red_Radiata.SHUT.jpg?v=1571439604"
-            title="Not Senhe"
-            subtitle="senhehao@senhehao.com"
+            title="Virtualoso"
           ></v-list-item>
         </v-list>
       </v-sheet>
