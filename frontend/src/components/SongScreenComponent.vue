@@ -8,7 +8,7 @@
               <div>
                 <v-card-title>High Score</v-card-title>
                 <div class="text-overline mb-1">
-                  696969
+                  {{this.highscore}}
                 </div>
               </div>
             </v-card-item>
@@ -54,7 +54,8 @@ export default {
       button_name: "View Sheet Music",
       pathSong: null,
       audio_var: false,
-      button: "mdi-play"
+      button: "mdi-play",
+      highscore: 0,
     }
   },
   methods: {

@@ -16,7 +16,7 @@
       </v-sheet>
       <v-divider />
       <v-list>
-        <v-list-item prepend-icon="mdi-home" title="Home" v-bind="props" @click="goHome()" link></v-list-item>
+        <v-list-item prepend-icon="mdi-home" title="Home" :key="-1" :value="Home" @click="goHome()" link></v-list-item>
       <!--
         <v-list-group v-for="folder in folders" :key="folder.name" :value="folder.name">
           <template v-slot:activator="{ props }">
@@ -29,7 +29,7 @@
           </v-list-item>
         </v-list-group>
         -->
-        <v-list-item v-for="(song, i) in songs" :key="i" @click="setSongId(song.song_id, song.name, song.path)" link>
+        <v-list-item v-for="(song, i) in songs" :key="i" @click="setSongId(song.song_id, song.name, song.path)" active-color='#673AB7'>
             <v-list-item-title v-text="song.name"></v-list-item-title>
         </v-list-item>
       </v-list>
@@ -105,7 +105,7 @@ export default {
     drawer: null, 
     title: "Home",
     songid: null,
-    songname: null,
+    songname: "Default",
     pathMainScreen: null,
     component_reload: 0,
     folders: [
@@ -232,7 +232,7 @@ export default {
     async uploadNewSong(newSongName, newSongPath) {
       const db = await Database.load("sqlite:data.db");
       console.log(newSongPath);
-      db.execute("INSERT INTO songs_table VALUES('" + newSongName + "', '" + newSongPath + "');");
+      db.execute("INSERT INTO songs_table (name, path) VALUES('" + newSongName + "', '" + newSongPath + "');");
       //db.execute("INSERT INTO songs_table VALUES('Kashmirga', 'Genshin.jpg');");
     },
   },

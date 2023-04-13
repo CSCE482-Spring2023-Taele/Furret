@@ -51,11 +51,11 @@ export default {
       async getSongScores() {
         const db = await Database.load("sqlite:data.db");
         //db.execute("CREATE TABLE scores_table( song INTEGER, score INTEGER );");
-        //db.execute("INSERT INTO scores_table VALUES(1, 42);");
-        //db.execute("INSERT INTO scores_table VALUES(1, 314159);");
-        //db.execute("INSERT INTO scores_table VALUES(1, 2718);");
-        //db.execute("INSERT INTO scores_table VALUES(1, 666);");
-        //db.execute("INSERT INTO scores_table VALUES(1, 0);");
+        db.execute("INSERT INTO scores_table VALUES(1, 42);");
+        db.execute("INSERT INTO scores_table VALUES(1, 314159);");
+        db.execute("INSERT INTO scores_table VALUES(1, 2718);");
+        db.execute("INSERT INTO scores_table VALUES(1, 666);");
+        db.execute("INSERT INTO scores_table VALUES(1, 0);");
         console.log(this.songid.songid);
         var q_result = db.select("SELECT score FROM scores_table WHERE song = '" + this.songid.songid + "';").then((response) => { this.scores=response; console.log(response)});
         console.log(q_result);
