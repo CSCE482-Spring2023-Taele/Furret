@@ -27,8 +27,8 @@ export default {
     }, 3000);
     async () => {    
       const db = await Database.load("sqlite:data.db");
-      db.execute("CREATE TABLE IF NOT EXISTS scores_table( song Varchar, score INTEGER );");
-      db.execute("CREATE TABLE IF NOT EXISTS songs_table( name Varchar, path Varchar );");
+      db.execute("CREATE TABLE IF NOT EXISTS songs_table( song_id integer primary key, name Varchar, path Varchar );");
+      db.execute("CREATE TABLE IF NOT EXISTS scores_table( song INTEGER, score INTEGER );");
     }
   }
 };

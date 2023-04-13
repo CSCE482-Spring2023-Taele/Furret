@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1 style="display: flex; justify-content: center;">{{songid.songid}}</h1>
+    <h1 style="display: flex; justify-content: center;">{{songname.songname}}</h1>
     <v-flex class="my-flex">
         <div class="text-center">
           <v-card class="d-flex align-center justify-center" style="width: 100%;">
@@ -8,7 +8,7 @@
               <div>
                 <v-card-title>High Score</v-card-title>
                 <div class="text-overline mb-1">
-                  696969
+                  {{this.highscore}}
                 </div>
               </div>
             </v-card-item>
@@ -24,8 +24,51 @@
       <v-card-actions class="justify-center" style="margin-top: 1%;">
         <v-btn color="primary" v-on:click="toggle">{{ button_name }}</v-btn>
       </v-card-actions>
+      <v-dialog
+      v-model="dialog"
+      persistent
+      width="1024"
+      >
+      <template v-slot:activator="{ props }">
+      <v-card-actions class="justify-center" v-bind="props" style="margin-top: 1%;">
+        <v-btn color="primary" v-on:click="rename">Rename</v-btn>
+      </v-card-actions>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">Song Name</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+          <v-text-field
+            v-model="sname"
+            clearable
+            hide-details="auto"
+            label="Song Name"
+          ></v-text-field>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            variant="text"
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="primary"
+            variant="text"
+            @click="rename()"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     </div>
-    <component :is="component" :songid="songid" :path="pathSong"/>
+    <component :is="component" :songid="songid" :songname="songname" :path="pathSong"/>
   </div>
 </template>
 
@@ -33,6 +76,7 @@
 import SheetMusicViewer from "./SheetMusicViewer.vue";
 import ResultsTable from "./ResultsTable.vue";
 import sound from '../assets/sample.mp3'
+import Database from "tauri-plugin-sql-api";
 
 const mytrack = new Audio(sound);
 mytrack.crossOrigin = 'anonymous';
@@ -40,7 +84,8 @@ mytrack.crossOrigin = 'anonymous';
 export default {
   name: 'SongScreenComponent',
   props: {
-     songid: String,
+     songid: Number,
+     songname: String,
      path: String
   },
   components: {
@@ -53,8 +98,15 @@ export default {
       button_name: "View Sheet Music",
       pathSong: null,
       audio_var: false,
-      button: "mdi-play"
+      button: "mdi-play",
+      highscore: 0,
+      dialog: false,
+      sname: "default",
     }
+  },
+  mounted() {
+    this.setHighScore();
+    this.sname = this.songname.songname;
   },
   methods: {
     toggle(){
@@ -79,6 +131,21 @@ export default {
         mytrack.currentTime = 0;
         this.audio_var = false;
       }
+    },
+    async setHighScore() {
+      const db = await Database.load("sqlite:data.db");
+      db.select("SELECT MAX(score) FROM scores_table WHERE song = '" + this.songid.songid + "';").then((response) => {
+        if(response[0]["MAX(score)"] != null) { 
+          this.highscore=response[0]["MAX(score)"]; 
+        } 
+        console.log(response)
+      });
+    },
+    async rename() {
+      this.dialog = false;
+    },
+    async delete() {
+
     }
   }
 }

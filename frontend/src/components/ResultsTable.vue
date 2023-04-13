@@ -38,18 +38,11 @@ export default {
       GraphViewer,
     },
     data: () => ({
-      scores: [
-        {
-          score: 69
-        },
-        {
-          score: 89
-        },
-      ],
+      scores: [],
       isModalVisible: false,
     }),
     props: {
-       songid: String,
+       songid: Number,
     },
     mounted() {
       this.getSongScores();
@@ -57,12 +50,12 @@ export default {
     methods: {
       async getSongScores() {
         const db = await Database.load("sqlite:data.db");
-        //db.execute("CREATE TABLE scores_table( song Varchar, score INTEGER );");
-        //db.execute("INSERT INTO scores_table VALUES('So This Is Love', 42);");
-        //db.execute("INSERT INTO scores_table VALUES('So This Is Love', 314159);");
-        //db.execute("INSERT INTO scores_table VALUES('So This Is Love', 2718);");
-        //db.execute("INSERT INTO scores_table VALUES('So This Is Love', 666);");
-        //db.execute("INSERT INTO scores_table VALUES('So This Is Love', 0);");
+        //db.execute("CREATE TABLE scores_table( song INTEGER, score INTEGER );");
+        db.execute("INSERT INTO scores_table VALUES(1, 42);");
+        db.execute("INSERT INTO scores_table VALUES(1, 314159);");
+        db.execute("INSERT INTO scores_table VALUES(1, 2718);");
+        db.execute("INSERT INTO scores_table VALUES(1, 666);");
+        db.execute("INSERT INTO scores_table VALUES(1, 0);");
         console.log(this.songid.songid);
         var q_result = db.select("SELECT score FROM scores_table WHERE song = '" + this.songid.songid + "';").then((response) => { this.scores=response; console.log(response)});
         console.log(q_result);

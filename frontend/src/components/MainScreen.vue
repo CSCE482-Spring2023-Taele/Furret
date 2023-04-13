@@ -9,14 +9,13 @@
         <v-list>
           <v-list-item
             prepend-avatar="http://cdn.shopify.com/s/files/1/1419/7120/products/Lycoris_Red_Radiata.SHUT.jpg?v=1571439604"
-            title="Not Senhe"
-            subtitle="senhehao@senhehao.com"
+            title="Virtualoso"
           ></v-list-item>
         </v-list>
       </v-sheet>
       <v-divider />
       <v-list>
-        <v-list-item prepend-icon="mdi-home" title="Home" v-bind="props" @click="goHome()" link></v-list-item>
+        <v-list-item prepend-icon="mdi-home" title="Home" :key="-1" :value="Home" @click="goHome()" link></v-list-item>
       <!--
         <v-list-group v-for="folder in folders" :key="folder.name" :value="folder.name">
           <template v-slot:activator="{ props }">
@@ -29,7 +28,7 @@
           </v-list-item>
         </v-list-group>
         -->
-        <v-list-item v-for="(song, i) in songs" :key="i" @click="setSongId(song.name, song.path)" link>
+        <v-list-item v-for="(song, i) in songs" :key="i" @click="setSongId(song.song_id, song.name, song.path)" active-color='#673AB7'>
             <v-list-item-title v-text="song.name"></v-list-item-title>
         </v-list-item>
       </v-list>
@@ -59,7 +58,7 @@
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>{{title}}</v-toolbar-title>
+      <v-toolbar-title></v-toolbar-title>
       
       <v-btn icon @click="swapPage('settings')">
         <v-icon>mdi-cog</v-icon>
@@ -68,7 +67,7 @@
 
     <v-main>
       <!--  -->
-      <component :is="currentView" :songid="songid" :path="pathMainScreen" :key="component_reload"/>
+      <component :is="currentView" :songid="songid" :songname="songname" :path="pathMainScreen" :key="component_reload"/>
     </v-main>
   </v-app>
 </template>
@@ -84,7 +83,7 @@ import HomeComponent from './HomeComponent.vue';
 import SongScreenComponent from './SongScreenComponent.vue';
 import Settings from './SettingsPage.vue'
 import Database from "tauri-plugin-sql-api";
-import { open } from '@tauri-apps/api/dialog';
+import{ open } from '@tauri-apps/api/dialog';
 import { copyFile, BaseDirectory } from '@tauri-apps/api/fs';
 
 const routes = {
@@ -103,8 +102,8 @@ export default {
   data: () => ({
     currentPath: window.location.hash,
     drawer: null, 
-    title: "Home",
     songid: null,
+    songname: "Default",
     pathMainScreen: null,
     component_reload: 0,
     folders: [
@@ -123,10 +122,12 @@ export default {
     ],
     songs: [
       {
+        song_id: 1,
         name: 'blah 1',
         path: 'Cinderella-SO-THIS-IS-LOVE-01.gif'
       },
       {
+        song_id: 2,
         name: 'blah 2',
         path: 'Glimpse_of_us_jpg-1.jpg'
       },
@@ -148,21 +149,21 @@ export default {
   methods: {
     swapPage: function(pagename) {
       this.songid = { songid: null }
+      this.songname = { songname: null }
       window.location.href = '#/' + pagename
-      this.title = "Settings"
       this.pathMainScreen = {path: null}
     },
-    setSongId: function(sid, pathSongScreen) {
+    setSongId: function(sid, sname, pathSongScreen) {
       this.songid = { songid: sid }
+      this.songname = { songname: sname}
       window.location.href = '#/song'
-      this.title = sid
       this.pathMainScreen = {path: pathSongScreen}
       this.component_reload++;
     },
     goHome() {
       this.songid = { songid: null }
+      this.songname = { songname: null }
       window.location.href = '#/'
-      this.title = "Home"
       this.pathMainScreen = {path: null}
     },
     async handleFileImport() {
@@ -212,13 +213,13 @@ export default {
     async getSongData() {
       console.log("testing testing");
       const db = await Database.load("sqlite:data.db");
-      //db.execute("CREATE TABLE songs_table( name Varchar, path Varchar );");
-      //db.execute("INSERT INTO songs_table VALUES('So This Is Love', 'Cinderella-SO-THIS-IS-LOVE-01.gif');");
-      //db.execute("INSERT INTO songs_table VALUES('Dreidel', 'Dreidel-sheet-music-with-chords.jpg');");
-      //db.execute("INSERT INTO songs_table VALUES('Glimpse of Us', 'Glimpse_of_us_jpg-1.jpg');");
-      //db.execute("INSERT INTO songs_table VALUES('Albedo Cutscene', 'Albedo.jpg');");
-      //db.execute("INSERT INTO songs_table VALUES('Dragonspine', 'dragonspine.jpg');");
-      //db.execute("INSERT INTO songs_table VALUES('Eternal Oasis', 'Genshin.jpg');");
+      //db.execute("CREATE TABLE songs_table( song_id integer primary key, name Varchar, path Varchar );");
+      //db.execute("INSERT INTO songs_table (name, path) VALUES('So This Is Love', 'Cinderella-SO-THIS-IS-LOVE-01.gif');");
+      //db.execute("INSERT INTO songs_table (name, path) VALUES('Dreidel', 'Dreidel-sheet-music-with-chords.jpg');");
+      //db.execute("INSERT INTO songs_table (name, path) VALUES('Glimpse of Us', 'Glimpse_of_us_jpg-1.jpg');");
+      //db.execute("INSERT INTO songs_table (name, path) VALUES('Albedo Cutscene', 'Albedo.jpg');");
+      //db.execute("INSERT INTO songs_table (name, path) VALUES('Dragonspine', 'dragonspine.jpg');");
+      //db.execute("INSERT INTO songs_table (name, path) VALUES('Eternal Oasis', 'Genshin.jpg');");
       var q_result = db.select("SELECT * FROM songs_table;").then((response) => {this.songs = response; console.log(response)});
       console.log(q_result);
       return "";
@@ -226,7 +227,7 @@ export default {
     async uploadNewSong(newSongName, newSongPath) {
       const db = await Database.load("sqlite:data.db");
       console.log(newSongPath);
-      db.execute("INSERT INTO songs_table VALUES('" + newSongName + "', '" + newSongPath + "');");
+      db.execute("INSERT INTO songs_table (name, path) VALUES('" + newSongName + "', '" + newSongPath + "');");
       //db.execute("INSERT INTO songs_table VALUES('Kashmirga', 'Genshin.jpg');");
     },
   },
