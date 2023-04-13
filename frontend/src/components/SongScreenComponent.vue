@@ -31,7 +31,7 @@
       >
       <template v-slot:activator="{ props }">
       <v-card-actions class="justify-center" v-bind="props" style="margin-top: 1%;">
-        <v-btn color="primary" v-on:click="rename">Rename</v-btn>
+        <v-btn color="primary">Rename</v-btn>
       </v-card-actions>
       </template>
       <v-card>
@@ -142,7 +142,13 @@ export default {
       });
     },
     async rename() {
+      let newName = this.sname;
+      console.log(newName);
       this.dialog = false;
+      const db = await Database.load("sqlite:data.db");
+      db.execute("UPDATE songs_table SET name = '" + newName + "' WHERE song_id = '" + this.songid.songid + "'");
+      window.location.href = '#/';
+      location.reload();
     },
     async delete() {
 

@@ -94,6 +94,7 @@ const routes = {
 
 
 export default {
+  name: 'MainScreen',
   components: {
     HomeComponent,
     SongScreenComponent,
