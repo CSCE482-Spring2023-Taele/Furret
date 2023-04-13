@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1 style="display: flex; justify-content: center;">{{songid.songid}}</h1>
+    <h1 style="display: flex; justify-content: center;">{{songname.songname}}</h1>
     <v-flex class="my-flex">
         <div class="text-center">
           <v-card class="d-flex align-center justify-center" style="width: 100%;">
@@ -25,7 +25,7 @@
         <v-btn color="primary" v-on:click="toggle">{{ button_name }}</v-btn>
       </v-card-actions>
     </div>
-    <component :is="component" :songid="songid" :path="pathSong"/>
+    <component :is="component" :songid="songid" :songname="songname" :path="pathSong"/>
   </div>
 </template>
 
@@ -40,7 +40,8 @@ mytrack.crossOrigin = 'anonymous';
 export default {
   name: 'SongScreenComponent',
   props: {
-     songid: String,
+     songid: Number,
+     songname: String,
      path: String
   },
   components: {
