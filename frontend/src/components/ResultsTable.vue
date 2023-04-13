@@ -79,7 +79,7 @@ export default {
 }
 td {
   cursor: pointer;
-  background-color: rgb(155, 153, 153);
+  background-color: #2A2A2A;
   color: white;
   text-align: center;
   padding: 12px 24px;
