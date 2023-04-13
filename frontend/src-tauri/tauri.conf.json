@@ -67,11 +67,11 @@
     },
     "windows": [
       {
-        "fullscreen": false,
         "height": 600,
         "resizable": true,
         "title": "Virtualoso",
-        "width": 800
+        "width": 800,
+        "maximized": true
       }
     ]
   }
