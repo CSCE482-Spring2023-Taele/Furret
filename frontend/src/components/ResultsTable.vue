@@ -7,7 +7,7 @@
     >
       <thead>
         <tr>
-          <th class="text-left">
+          <th class="text-center" style="color: white;">
             Past Results
           </th>
         </tr>
@@ -17,7 +17,7 @@
           v-for="(score, i) in scores"
           :key="i"
         >
-          <v-btn variant="tonal" @click="showModal">{{ score.score }}</v-btn>
+          <td class="text-center" variant="tonal" @click="showModal">{{ score.score }}</td>
         </tr>
       </tbody>
     </v-table>
@@ -76,5 +76,16 @@ export default {
   margin-left: 3%; 
   margin-right: 3%;
   margin-bottom: 10px;
+}
+td {
+  cursor: pointer;
+  background-color: rgb(155, 153, 153);
+  color: white;
+  text-align: center;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+}
+td:hover {
+  background-color: #555756;
 }
 </style>
