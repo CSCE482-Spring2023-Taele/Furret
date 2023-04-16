@@ -3,7 +3,7 @@
     <h1 style="display: flex; justify-content: center;">Welcome to Virtualoso!</h1>
     <v-flex class="my-flex">
         <div class="text-center">
-          <v-card class="d-flex align-center justify-center" style="width: 100%;">
+          <v-card class="d-flex align-center justify-center" color="info" style="width: 100%;">
             <v-card-item>
               <div>
                 <v-card-title>Last Played</v-card-title>

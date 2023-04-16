@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawer">
       <!--  -->
       <v-sheet
-        color="grey-lighten-4"
+        color="info"
         class="pa-4"
       >
         <v-list>
@@ -36,7 +36,8 @@
         <v-divider />
         <div class="pa-2">
           <v-btn block
-          color="#BB86FC"
+          color="#43236a"
+          style="color: white;"
           prepend-icon="mdi-cloud-upload"
           :loading="isSelecting" 
           @click="handleFileImport"

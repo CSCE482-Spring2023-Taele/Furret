@@ -2,7 +2,13 @@
   <v-app>
     <v-flex class="my-flex">
       <div class="text-center">
-        <v-btn @click="toggleTheme">toggle theme</v-btn>
+        <v-btn 
+          color="#43236a"
+          style="color: white;" 
+          @click="toggleTheme"
+        >
+          toggle theme
+        </v-btn>
       </div>
     </v-flex>
   </v-app>
@@ -23,7 +29,10 @@ export default {
 
     return {
       theme,
-      toggleTheme: () => theme.global.name.value = theme.global.current.value.dark ? 'virtualosoTheme' : 'dark'
+      toggleTheme() {
+        console.log(theme.global.current);
+        theme.global.name.value = theme.global.current.value.dark ? 'virtualosoTheme' : 'virtualosoDark'
+      }
     }
   }
 }
