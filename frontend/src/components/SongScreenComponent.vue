@@ -29,44 +29,78 @@
       persistent
       width="1024"
       >
-      <template v-slot:activator="{ props }">
-      <v-card-actions class="justify-center" v-bind="props" style="margin-top: 1%;">
-        <v-btn color="primary">Rename</v-btn>
-      </v-card-actions>
-      </template>
-      <v-card>
-        <v-card-title>
-          <span class="text-h5">Song Name</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-          <v-text-field
-            v-model="sname"
-            clearable
-            hide-details="auto"
-            label="Song Name"
-          ></v-text-field>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            variant="text"
-            @click="dialog = false"
-          >
-            Close
-          </v-btn>
-          <v-btn
-            color="primary"
-            variant="text"
-            @click="rename()"
-          >
-            Save
-          </v-btn>
+        <template v-slot:activator="{ props }">
+        <v-card-actions class="justify-center" v-bind="props" style="margin-top: 1%;">
+          <v-btn color="primary">Rename</v-btn>
         </v-card-actions>
-      </v-card>
-    </v-dialog>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Song Name</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+            <v-text-field
+              v-model="sname"
+              clearable
+              hide-details="auto"
+              label="Song Name"
+            ></v-text-field>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              variant="text"
+              @click="dialog = false"
+            >
+              Close
+            </v-btn>
+            <v-btn
+              color="primary"
+              variant="text"
+              @click="rename()"
+            >
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+      v-model="d2"
+      persistent
+      width="auto"
+      >
+        <template v-slot:activator="{ props }">
+        <v-card-actions class="justify-center" v-bind="props" style="margin-top: 1%;">
+          <v-btn color="primary">Delete</v-btn>
+        </v-card-actions>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Are You Sure?</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-btn
+                color="primary"
+                variant="text"
+                @click="remove()"
+              >
+                Yes
+              </v-btn>
+              <v-btn
+                color="primary"
+                variant="text"
+                @click="d2 = false"
+              >
+                No
+              </v-btn>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
     <component :is="component" :songid="songid" :songname="songname" :path="pathSong"/>
   </div>
@@ -101,6 +135,7 @@ export default {
       button: "mdi-play",
       highscore: 0,
       dialog: false,
+      d2: false,
       sname: "default",
     }
   },
@@ -150,8 +185,11 @@ export default {
       window.location.href = '#/';
       location.reload();
     },
-    async delete() {
-
+    async remove() {
+      const db = await Database.load("sqlite:data.db");
+      db.execute("DELETE FROM songs_table WHERE song_id = '" + this.songid.songid + "'");
+      window.location.href = '#/';
+      location.reload();
     }
   }
 }
