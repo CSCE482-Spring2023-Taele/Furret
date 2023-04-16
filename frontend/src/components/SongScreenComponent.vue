@@ -17,7 +17,7 @@
     </v-flex>
     <div class="row">
       <v-card-actions class="justify-center" style="margin-top: 1%;">
-        <v-btn color="primary" v-on:click="playAudio">
+        <v-btn color="primary" v-on:click="uploadResult()">
           <v-icon>{{ button }}</v-icon>
         </v-btn>
       </v-card-actions>
@@ -111,6 +111,7 @@ import SheetMusicViewer from "./SheetMusicViewer.vue";
 import ResultsTable from "./ResultsTable.vue";
 import sound from '../assets/sample.mp3'
 import Database from "tauri-plugin-sql-api";
+import{ open } from '@tauri-apps/api/dialog';
 
 const mytrack = new Audio(sound);
 mytrack.crossOrigin = 'anonymous';
@@ -132,7 +133,7 @@ export default {
       button_name: "View Sheet Music",
       pathSong: null,
       audio_var: false,
-      button: "mdi-play",
+      button: "mdi-upload",
       highscore: 0,
       dialog: false,
       d2: false,
@@ -155,6 +156,7 @@ export default {
         this.pathSong = this.path;
       }
     },
+    /*
     playAudio() {
       if (this.audio_var == false) {
         mytrack.play();
@@ -165,6 +167,26 @@ export default {
         this.button = "mdi-play"
         mytrack.currentTime = 0;
         this.audio_var = false;
+      }
+    },
+    */
+    async uploadResult() {
+      const selected = await open({
+        multiple: true,
+        filters: [{
+          name: 'Audio',
+          extensions: ['wav', 'mp3']
+        }]
+      });
+      if (Array.isArray(selected)) {
+        // user selected multiple files
+        console.log("multiple");
+      } else if (selected === null) {
+        // user cancelled the selection
+        console.log("cancelled");
+      } else {
+        // user selected a single file
+        console.log("single");
       }
     },
     async setHighScore() {
