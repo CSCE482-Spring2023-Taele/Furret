@@ -36,7 +36,7 @@
         <v-divider />
         <div class="pa-2">
           <v-btn block
-          color="#43236a"
+          color="primary"
           style="color: white;"
           prepend-icon="mdi-cloud-upload"
           :loading="isSelecting" 

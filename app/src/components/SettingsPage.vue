@@ -3,7 +3,7 @@
     <v-flex class="my-flex">
       <div class="text-center">
         <v-btn 
-          color="#43236a"
+          color="primary"
           style="color: white;" 
           @click="toggleTheme"
         >

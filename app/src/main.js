@@ -14,7 +14,7 @@ const virtualosoTheme = {
   colors: {
     background: '#FFFFFF',
     surface: '#FFFFFF',
-    primary: '#43236a',
+    primary: '#673AB7',
     'primary-darken-1': '#3700B3',
     secondary: '#03DAC5',
     'secondary-darken-1': '#018786',
