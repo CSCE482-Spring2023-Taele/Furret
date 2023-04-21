@@ -3,7 +3,7 @@
     <h1 style="display: flex; justify-content: center;">{{songname.songname}}</h1>
     <v-flex class="my-flex">
         <div class="text-center">
-          <v-card class="d-flex align-center justify-center" style="width: 100%;">
+          <v-card class="d-flex align-center justify-center" color="info" style="width: 100%;">
             <v-card-item>
               <div>
                 <v-card-title>High Score</v-card-title>
@@ -17,12 +17,12 @@
     </v-flex>
     <div class="row">
       <v-card-actions class="justify-center" style="margin-top: 1%;">
-        <v-btn color="primary" v-on:click="uploadResult()">
+        <v-btn color="warning" v-on:click="uploadResult()">
           <v-icon>{{ button }}</v-icon>
         </v-btn>
       </v-card-actions>
       <v-card-actions class="justify-center" style="margin-top: 1%;">
-        <v-btn color="primary" v-on:click="toggle">{{ button_name }}</v-btn>
+        <v-btn color="warning" v-on:click="toggle">{{ button_name }}</v-btn>
       </v-card-actions>
       <v-dialog
       v-model="dialog"
@@ -31,7 +31,7 @@
       >
         <template v-slot:activator="{ props }">
         <v-card-actions class="justify-center" v-bind="props" style="margin-top: 1%;">
-          <v-btn color="primary">Rename</v-btn>
+          <v-btn color="warning">Rename</v-btn>
         </v-card-actions>
         </template>
         <v-card>
@@ -51,14 +51,14 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              color="primary"
+              color="warning"
               variant="text"
               @click="dialog = false"
             >
               Close
             </v-btn>
             <v-btn
-              color="primary"
+              color="warning"
               variant="text"
               @click="rename()"
             >
@@ -74,7 +74,7 @@
       >
         <template v-slot:activator="{ props }">
         <v-card-actions class="justify-center" v-bind="props" style="margin-top: 1%;">
-          <v-btn color="primary">Delete</v-btn>
+          <v-btn color="warning">Delete</v-btn>
         </v-card-actions>
         </template>
         <v-card>
@@ -84,14 +84,14 @@
           <v-card-text>
             <v-container>
               <v-btn
-                color="primary"
+                color="warning"
                 variant="text"
                 @click="remove()"
               >
                 Yes
               </v-btn>
               <v-btn
-                color="primary"
+                color="warning"
                 variant="text"
                 @click="d2 = false"
               >

@@ -14,14 +14,30 @@ const virtualosoTheme = {
   colors: {
     background: '#FFFFFF',
     surface: '#FFFFFF',
-    primary: '#673AB7',
+    primary: '#43236a',
     'primary-darken-1': '#3700B3',
     secondary: '#03DAC5',
     'secondary-darken-1': '#018786',
     error: '#B00020',
-    info: '#2196F3',
-    success: '#4CAF50',
-    warning: '#FB8C00',
+    info: '#fcfcfc',
+    success: '#fcfcfc',
+    warning: '#120233',
+  }
+}
+
+const virtualosoDark = {
+  dark: true,
+  colors: {
+    background: '#00040a',
+    surface: '#120233',
+    primary: '#120233',
+    'primary-darken-1': '#3700B3',
+    secondary: '#c9b30a',
+    'secondary-darken-1': '#018786',
+    error: '#B00020',
+    info: '#320f61',
+    success: '#531c91',
+    warning: '#954ee6',
   }
 }
 
@@ -30,6 +46,7 @@ const vuetify = createVuetify({
     defaultTheme: 'virtualosoTheme',
     themes: {
       virtualosoTheme,
+      virtualosoDark
     },
   },
   components,
