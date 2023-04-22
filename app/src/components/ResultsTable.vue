@@ -19,9 +19,11 @@
         >
           <td class="text-center" variant="tonal" @click="showModal">{{ score.score }}</td>
         </tr>
+        <!-- <td class="text-center" variant="tonal" @click="showModal">3</td> -->
       </tbody>
     </v-table>
     <GraphViewer
+      :key="graphKey"
       v-show="isModalVisible"
       @close="closeModal"
     />
@@ -40,6 +42,7 @@ export default {
     data: () => ({
       scores: [],
       isModalVisible: false,
+      graphKey: 0
     }),
     props: {
        songid: Number,
@@ -63,6 +66,7 @@ export default {
       },
       showModal() {
         this.isModalVisible = true;
+        this.graphKey++;
       },
       closeModal() {
         this.isModalVisible = false;
