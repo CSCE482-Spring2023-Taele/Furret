@@ -111,9 +111,11 @@ import SheetMusicViewer from "./SheetMusicViewer.vue";
 import ResultsTable from "./ResultsTable.vue";
 import sound from '../assets/sample.mp3'
 import Database from "tauri-plugin-sql-api";
-import{ open } from '@tauri-apps/api/dialog';
+import { open } from '@tauri-apps/api/dialog';
+import { invoke } from '@tauri-apps/api/tauri';
 
 const mytrack = new Audio(sound);
+// const invoke = window.__TAURI__.invoke;
 mytrack.crossOrigin = 'anonymous';
 
 export default {
@@ -180,6 +182,7 @@ export default {
       });
       if (Array.isArray(selected)) {
         // user selected multiple files
+        invoke('test_command')
         console.log("multiple");
       } else if (selected === null) {
         // user cancelled the selection
