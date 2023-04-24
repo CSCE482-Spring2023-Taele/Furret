@@ -182,7 +182,9 @@ export default {
       });
       if (Array.isArray(selected)) {
         // user selected multiple files
-        invoke('upload_processor', { inputAudio: 'Glimpse_of_us_jpg-1.jpg', inputImage: 'Joji-Glimpse of Us.mp3'});
+        const db = await Database.load("sqlite:data.db");
+        let filename = "error.txt"
+        invoke('upload_processor', { inputAudio: selected[0], inputImage: this.path.path}).then((message) => {filename = message+".txt"; db.execute("INSERT INTO scores_table VALUES(" + this.songid.songid + ", 420, '" + filename + "');")});
         console.log("multiple");
       } else if (selected === null) {
         // user cancelled the selection

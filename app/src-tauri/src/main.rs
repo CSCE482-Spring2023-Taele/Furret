@@ -6,14 +6,14 @@ use std::process::Command;
 
 #[tauri::command]
 fn upload_processor(input_audio: String, input_image: String) -> String {
-    println!("Input for audio: {} | input for image: {}", input_audio, input_image);
+    //println!("Input for audio: {} | input for image: {}", input_audio, input_image);
     let output = Command::new("bash")
             .args(["Analysis/backend/runner.sh", &*input_audio, &*input_image])
             .output()
             .expect("failed to execute process");
     let out_string = String::from_utf8(output.stdout).unwrap();
     println!("{}", out_string);
-    println!("Function completed!");
+    //println!("Function completed!");
     out_string
 }
 
