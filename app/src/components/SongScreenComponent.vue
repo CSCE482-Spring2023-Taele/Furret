@@ -182,7 +182,7 @@ export default {
       });
       if (Array.isArray(selected)) {
         // user selected multiple files
-        invoke('test_command')
+        invoke('upload_processor', { inputAudio: 'Glimpse_of_us_jpg-1.jpg', inputImage: 'Joji-Glimpse of Us.mp3'});
         console.log("multiple");
       } else if (selected === null) {
         // user cancelled the selection
