@@ -6,16 +6,39 @@
         style="position: relative; justify-content: center;"/>
         <div class="bottom-div">
             <h3>Virtualoso</h3>
-            <p style="font-style: italic; font-size: 20px;">Did you know that violins have strings?</p>
+            <p style="font-style: italic; font-size: 20px;">{{musicFact[randomNum]}}</p>
         </div>
     </div>
 </template>
 
 <script>
-export default {
-name: "LoadingScreen",
-props: ["isLoading"]
-};
+    export default {
+        name: "LoadingScreen",
+        props: ["isLoading"],
+        data() {
+            return {
+                musicFact: [],
+                randomNum: 0
+            }
+        },
+        created() {
+            this.musicFact = [
+                "If you can play it slowly, you can play it quickly",
+                "Did you know that violins have strings?", 
+                "Viola = big violin", 
+                "Keyboard is not the same as Piano!", 
+                "Charlie Puth has perfect pitch apparently.",
+                "You need to practice 10,000 hours to master your instrument",
+                "Geniuses are born, not created.",
+                "-S A C R I L E G I O U S-",
+                "I don’t want to BeReal, I want to BePracticing",
+            ];
+            let min = Math.ceil(0);
+            let max = Math.floor(this.musicFact.length);
+            this.randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            console.log(this.musicFact.length);
+        }
+    };
 </script>
 
 <style>
