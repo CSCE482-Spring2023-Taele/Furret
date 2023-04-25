@@ -36,13 +36,23 @@
         <v-divider />
         <div class="pa-2">
           <v-btn block
-          color="primary"
-          style="color: white;"
-          prepend-icon="mdi-cloud-upload"
-          :loading="isSelecting" 
-          @click="handleFileImport"
+            color="primary"
+            style="color: white;"
+            prepend-icon="mdi-cloud-upload"
+            :loading="isSelecting" 
+            @click="handleSheetMusicImport"
           >
-            Upload
+            Sheet Music Upload
+          </v-btn>
+          <v-divider />
+          <v-btn block
+            color="primary"
+            style="color: white;"
+            prepend-icon="mdi-cloud-upload"
+            :loading="isSelecting" 
+            @click="handleMusicXMLImport"
+          >
+            MusicXML Upload
           </v-btn>
           <input 
             ref="uploader" 
@@ -168,7 +178,7 @@ export default {
       window.location.href = '#/'
       this.pathMainScreen = {path: null}
     },
-    async handleFileImport() {
+    async handleSheetMusicImport() {
       /*
       this.isSelecting = true;
 
@@ -212,6 +222,7 @@ export default {
         console.log("single");
       }
     },
+    async handleMusicXMLImport() {},
     async getSongData() {
       console.log("testing testing");
       const db = await Database.load("sqlite:data.db");
