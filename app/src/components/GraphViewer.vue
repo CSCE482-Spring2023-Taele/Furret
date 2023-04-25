@@ -14,10 +14,12 @@
 </template>
 
 <script>
-  import output from "raw-loader!../assets/bruh.txt";
   import Chart from 'chart.js/auto';
   export default {
     name: 'GraphViewer',
+    props: {
+      outputFilePath: String
+    },
     data() {
       return {
         userData: [],
@@ -32,77 +34,98 @@
     },
     created() {
       console.log('created hook called');
-      let user = false;
-      let sheet = false;
-      output.split('\n').forEach(element => {
-        let val0 = element.split(' ')[0];
-        let val1 = element.split(' ')[1];
-        let val2 = element.split(' ')[2];
-        if (val0 === "User") {
-          user = true;
-          sheet = false;
-        }
-        else if (val0 === "Sheet") {
-          user = false;
-          sheet = true;
-        }
-        if (user && !isNaN(val0) && !isNaN(val1)) {
-          this.userData.push({x: [val0, val1], y: val2});
-          if (this.notes.indexOf(val2) === -1) {
-            this.notes.push(val2);
+      import(`raw-loader!../assets/${this.outputFilePath}`).then(module => {
+        return module.default;
+      }).then(fileContent => {
+        let userData = [];
+        let sheetData = [];
+        let notes = [];
+
+        let user = false;
+        let sheet = false;
+        fileContent.split('\n').forEach(element => {
+          let val0 = element.split(' ')[0];
+          let val1 = element.split(' ')[1];
+          let val2 = element.split(' ')[2];
+          if (val0 === "User") {
+            user = true;
+            sheet = false;
           }
-        }
-        if (sheet && !isNaN(val0) && !isNaN(val1)) {
-          this.sheetData.push({x: [val0, val1], y: val2});
-          if (this.notes.indexOf(val2) === -1) {
-            this.notes.push(val2);
+          else if (val0 === "Sheet") {
+            user = false;
+            sheet = true;
           }
-        }
-      });
-      // console.log(this.userData);
-    },
-    mounted() {
-      console.log('mounted hook called');
-      const ctx = document.getElementById('myChart');
-      const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: this.notes,
-            datasets: [{
-                label: 'Sheet Notes',
-                data: this.sheetData,
-                borderWidth: 1,
-                barPercentage: 0.5,
-            },
-            {
-                label: 'User Notes',
-                data: this.userData,
-                borderWidth: 1,
-                barPercentage: 0.5,
-            },
-          ]
-        },
-        options: {
-          indexAxis: 'y',
-          scales: {
-            x: {
-              min: 0,
-              title: {
-                  display: true,
-                  text: 'Time (s)'
-                }
-            },
-            y: {
-                title: {
-                  display: true,
-                  text: 'Notes'
-                }
-                
+          
+          if (user && !isNaN(val0) && !isNaN(val1)) {
+            userData.push({x: [val0, val1], y: val2});
+            if (notes.indexOf(val2) === -1) {
+              notes.push(val2);
             }
           }
+          if (sheet && !isNaN(val0) && !isNaN(val1)) {
+            sheetData.push({x: [val0, val1], y: val2});
+            if (notes.indexOf(val2) === -1) {
+              notes.push(val2);
+            }
+          }
+        });
+
+        this.userData = userData;
+        this.sheetData = sheetData;
+        this.notes = notes;
+      }).catch(error => {
+        console.error(`Error loading file: ${this.outputFilePath}`, error);
+      });
+    },
+    computed: {
+      chartData() {
+        return {
+          labels: this.notes,
+          datasets: [
+            {
+              label: 'Sheet Notes',
+              data: this.sheetData,
+              borderWidth: 1,
+              barPercentage: 0.5,
+            },
+            {
+              label: 'User Notes',
+              data: this.userData,
+              borderWidth: 1,
+              barPercentage: 0.5,
+            },
+          ]
         }
-    });
-    myChart;
+      }
+    },
+    watch: {
+      chartData: function () {
+        const ctx = document.getElementById('myChart');
+        const myChart = new Chart(ctx, {
+          type: 'bar',
+          data: this.chartData,
+          options: {
+            indexAxis: 'y',
+            scales: {
+              x: {
+                min: 0,
+                title: {
+                    display: true,
+                    text: 'Time (s)'
+                  }
+              },
+              y: {
+                  title: {
+                    display: true,
+                    text: 'Notes'
+                  }
+                  
+              }
+            }
+          }
+      });
+      myChart;
+      }
     }
   };
 </script>

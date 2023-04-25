@@ -19,12 +19,13 @@
         >
           <td class="text-center" variant="tonal" @click="showModal">{{ score.score }}</td>
         </tr>
-        <!-- <td class="text-center" variant="tonal" @click="showModal">3</td> -->
+        <td class="text-center" variant="tonal" @click="showModal">3</td>
       </tbody>
     </v-table>
     <GraphViewer
       :key="graphKey"
       v-show="isModalVisible"
+      :outputFilePath="outputFilePath"
       @close="closeModal"
     />
   </div>
@@ -42,7 +43,8 @@ export default {
     data: () => ({
       scores: [],
       isModalVisible: false,
-      graphKey: 0
+      graphKey: 0,
+      outputFilePath: ""
     }),
     props: {
        songid: Number,
@@ -67,6 +69,7 @@ export default {
       showModal() {
         this.isModalVisible = true;
         this.graphKey++;
+        this.outputFilePath = "bruh.txt"; // change this to pull from database
       },
       closeModal() {
         this.isModalVisible = false;
