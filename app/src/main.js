@@ -18,9 +18,9 @@ const virtualosoTheme = {
     'primary-darken-1': '#3700B3',
     secondary: '#03DAC5',
     'secondary-darken-1': '#018786',
-    error: '#B00020',
+    error: 'black',
     info: '#fcfcfc',
-    success: '#fcfcfc',
+    success: 'white',
     warning: '#120233',
   }
 }
@@ -34,9 +34,9 @@ const virtualosoDark = {
     'primary-darken-1': '#3700B3',
     secondary: '#c9b30a',
     'secondary-darken-1': '#018786',
-    error: '#B00020',
+    error: "#ffffff",
     info: '#320f61',
-    success: '#531c91',
+    success: '#130924',
     warning: '#954ee6',
   }
 }

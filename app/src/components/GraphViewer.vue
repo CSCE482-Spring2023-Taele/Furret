@@ -15,6 +15,8 @@
 
 <script>
   import Chart from 'chart.js/auto';
+  import { useTheme } from 'vuetify'
+
   export default {
     name: 'GraphViewer',
     props: {
@@ -77,6 +79,10 @@
         console.error(`Error loading file: ${this.outputFilePath}`, error);
       });
     },
+    mounted() {
+      const theme = useTheme()
+      this.$el.style.setProperty('--success', theme.global.current.value.colors.success);
+    },
     computed: {
       chartData() {
         return {
@@ -110,16 +116,51 @@
               x: {
                 min: 0,
                 title: {
-                    display: true,
-                    text: 'Time (s)'
+                  display: true,
+                  text: 'Time (s)',
+                  font: {
+                    size: 15,
+                  } 
+                },
+                ticks: {
+                  font: {
+                    weight: 'bold',
+                    size: 15
                   }
+                },
+                grid: {
+                  color: '#b8b0b0',
+                  lineWidth: 0.2
+                }
               },
               y: {
                   title: {
                     display: true,
-                    text: 'Notes'
+                    text: 'Notes',
+                    font: {
+                      size: 15,
+                    } 
+                  },
+                  ticks: {
+                    font: {
+                      weight: 'bold',
+                      size: 15
+                    }
+                  },
+                  grid: {
+                    color: '#b8b0b0',
+                    lineWidth: 0.2
                   }
-                  
+              },
+            },
+            plugins: {
+              legend: {
+                  labels: {
+                      font: {
+                          style: 'bold',
+                          weight: '600',
+                      }
+                  }
               }
             }
           }
@@ -142,7 +183,7 @@
   background-color: #000000da;
 }
 .modal {
-  background-color: white;
+  background-color: var(--success);
   height: 75%;
   width: 75%;
   padding: 60px 0;
