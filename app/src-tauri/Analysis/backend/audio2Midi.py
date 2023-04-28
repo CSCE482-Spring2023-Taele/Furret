@@ -12,13 +12,9 @@ class Audio2Midi:
         subprocess.run(["basic-pitch", midiFilePath, audioFilePath, "--save-midi"])
         path = "./audioMidiTemp"
         fileName = os.listdir(path)[0]
-        # Detect the encoding of the file
-        with open(fileName, 'rb') as f:
-            result = chardet.detect(f.read())
-            
-        # Open the file in the detected encoding and write to a new UTF-8 file
-        with open(fileName, encoding=result['encoding']) as f, open('file_utf8.txt', 'w', encoding='utf-8') as f_utf8:
-            f_utf8.write(f.read())
+        # # Detect the encoding of the file
+        # with open(fileName, 'rb') as f:
+        #     result = chardet.detect(f.read())
         
         
 
