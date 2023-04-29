@@ -19,7 +19,6 @@
         >
           <td class="text-center" variant="tonal" @click="showModal">{{ score.score }}</td>
         </tr>
-        <td class="text-center" variant="tonal" @click="showModal">3</td>
       </tbody>
     </v-table>
     <GraphViewer
