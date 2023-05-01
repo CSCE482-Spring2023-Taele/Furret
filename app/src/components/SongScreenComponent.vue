@@ -111,8 +111,8 @@ import SheetMusicViewer from "./SheetMusicViewer.vue";
 import ResultsTable from "./ResultsTable.vue";
 import sound from '../assets/sample.mp3'
 import Database from "tauri-plugin-sql-api";
-import { open } from '@tauri-apps/api/dialog';
-import { invoke } from '@tauri-apps/api/tauri';
+//import { open } from '@tauri-apps/api/dialog';
+//import { invoke } from '@tauri-apps/api/tauri';
 
 const mytrack = new Audio(sound);
 // const invoke = window.__TAURI__.invoke;
@@ -140,6 +140,7 @@ export default {
       dialog: false,
       d2: false,
       sname: "default",
+      score: 0
     }
   },
   mounted() {
@@ -184,7 +185,22 @@ export default {
         // user selected multiple files
         const db = await Database.load("sqlite:data.db");
         let filename = "error.txt"
-        invoke('upload_processor', { inputAudio: selected[0], inputImage: this.path.path}).then((message) => {filename = message+".txt"; db.execute("INSERT INTO scores_table VALUES(" + this.songid.songid + ", 420, '" + filename + "');")});
+        invoke('upload_processor', { inputAudio: selected[0], inputImage: this.path.path}).then((message) => {
+          fname = message.split("\n").at(-1).replace(/(\r\n|\n|\r)/gm, "");
+          filename = message+".txt"; 
+          import('raw-loader!../../src-tauri/resources/outputs/' + filename).then(module => {
+            return module.default;
+          }).then(fileContent => {
+           fileContent.split('\n').forEach(element => {
+               let val0 = element.split(' ')[0];
+               let score = element.split(' ')[3];
+               if (val0 === "Similarity") {
+                  this.score = Math.round(score * 1000);    
+                  db.execute("INSERT INTO scores_table (song, score, scorefile) VALUES(" + this.songid.songid + ", " + this.score + ", '" + filename + "');"); 
+               }
+            }) 
+          });
+        });
         console.log("multiple");
       } else if (selected === null) {
         // user cancelled the selection
@@ -215,6 +231,7 @@ export default {
     async remove() {
       const db = await Database.load("sqlite:data.db");
       db.execute("DELETE FROM songs_table WHERE song_id = '" + this.songid.songid + "'");
+      db.execute("DELETE FROM scores_table WHERE song = '" + this.songid.songid + "'");
       window.location.href = '#/';
       location.reload();
     }

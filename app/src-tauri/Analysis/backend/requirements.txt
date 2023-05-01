@@ -1,6 +1,8 @@
-crepe==0.0.13
-librosa==0.10.0
-mido==1.2.10
-music21==8.1.0
-numpy==1.23.5
+crepe
+basic-pitch
+tensorflow
+librosa
+mido
+music21
+numpy
 oemer

@@ -194,7 +194,7 @@ export default {
         multiple: true,
         filters: [{
           name: 'Image',
-          extensions: ['png', 'jpeg']
+          extensions: ['png', 'jpeg', 'jpg']
         }]
       });
       if (Array.isArray(selected)) {

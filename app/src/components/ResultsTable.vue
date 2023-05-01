@@ -55,7 +55,7 @@ export default {
       async getSongScores() {
         const db = await Database.load("sqlite:data.db");
         //db.select("SELECT * FROM scores_table;").then((response) => console.log(response));
-        //db.execute("INSERT INTO scores_table VALUES(1, 42);");
+        //db.execute("CREATE TABLE scores_table( scoreid INTEGER primary key, song INTEGER, score INTEGER, scorefile Varchar );");
         //db.execute("INSERT INTO scores_table VALUES(1, 314159);");
         //db.execute("INSERT INTO scores_table VALUES(1, 2718);");
         //db.execute("INSERT INTO scores_table VALUES(1, 666);");
