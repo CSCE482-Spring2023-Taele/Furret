@@ -17,7 +17,7 @@
           v-for="(score, i) in scores"
           :key="i"
         >
-          <td class="text-center" variant="tonal" @click="showModal">{{ score.score }}</td>
+          <td class="text-center" variant="tonal" @click="showModal(score.scorefile)">{{ score.score }}</td>
         </tr>
       </tbody>
     </v-table>
@@ -61,14 +61,16 @@ export default {
         //db.execute("INSERT INTO scores_table VALUES(1, 666);");
         //db.execute("INSERT INTO scores_table VALUES(1, 0);");
         console.log(this.songid.songid);
-        var q_result = db.select("SELECT score FROM scores_table WHERE song = '" + this.songid.songid + "';").then((response) => { this.scores=response; console.log(response)});
+        var q_result = db.select("SELECT score, scorefile FROM scores_table WHERE song = '" + this.songid.songid + "';").then((response) => { this.scores=response; console.log(response)});
         console.log(q_result);
 
       },
-      showModal() {
+      showModal(ofilename) {
+        console.log(this.scores);
+        console.log(ofilename); 
         this.isModalVisible = true;
         this.graphKey++;
-        this.outputFilePath = "bruh.txt"; // change this to pull from database
+        this.outputFilePath = ofilename; // change this to pull from database
       },
       closeModal() {
         this.isModalVisible = false;

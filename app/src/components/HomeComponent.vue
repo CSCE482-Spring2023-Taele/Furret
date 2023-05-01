@@ -15,12 +15,12 @@
           </v-card>
         </div>
     </v-flex>
-    <canvas style="margin-top: 2%;" id="myChart"></canvas>
   </div>
 </template>
 
 <script>
   import Chart from 'chart.js/auto';
+import Database from "tauri-plugin-sql-api";
 
   export default {
     name: 'HomeComponent',
@@ -33,10 +33,33 @@
       }
     },
     created() {
-      this.latestSong = "Glimpse of Us";
-      this.scoreList = [50, 10, 40, 80, 33, 22]; // get this from database where songname == this.latestSong
-      for (let i = 1; i <= this.scoreList.length; i++) {
-        this.x.push(i);
+//      this.latestSong = "Glimpse of Us";
+//      this.scoreList = []; // get this from database where songname == this.latestSong
+//      for (let i = 1; i <= this.scoreList.length; i++) {
+//        this.x.push(i);
+      this.updatelatestplay();
+    },
+    mounted() {
+    },
+    methods: {
+      async updatelatestplay() {
+        this.scoreList = [];
+        this.x = [];
+        const db = await Database.load("sqlite:data.db");
+        await db.select("SELECT song, scoreid FROM scores_table ORDER BY scoreid DESC LIMIT 1;").then((response) => { 
+          console.log(response);
+          console.log(response[0].song);
+          db.select("SELECT name FROM songs_table WHERE song_id = " + response[0].song + ";").then((response2) => { console.log(response2); this.latestSong = response2[0].name });
+          db.select("SELECT * FROM scores_table WHERE song = " + response[0].song + ";").then((response2) => {
+            console.log(response2);
+            response2.forEach((x) => {console.log(x.score); this.scoreList.push(x.score);
+            });
+            for (let i = 1; i <= this.scoreList.length; i++) {
+              console.log(i);
+              this.x.push(i);
+            }
+          });
+        });
       }
     },
     computed: {

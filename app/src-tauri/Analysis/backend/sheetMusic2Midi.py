@@ -14,7 +14,7 @@ class sheetMusic2Midi:
 
     def scanningMusic(self):
         print("Oemer Started!")
-        command = ['oemer', self.smusFP, '-o', self.mxmlFP, '--save-cache']
+        command = ['oemer', self.smusFP, '-o', self.mxmlFP]
         subprocess.run(command, check=True)
         print("Oemer Completed!")
     

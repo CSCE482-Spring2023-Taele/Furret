@@ -7,6 +7,7 @@ use std::process::Command;
 #[tauri::command]
 fn upload_processor(input_audio: String, input_image: String) -> String {
     //println!("Input for audio: {} | input for image: {}", input_audio, input_image);
+    println!("begin rust function");
     let output = Command::new("bash")
             .args(["Analysis/backend/runner.sh", &*input_audio, &*input_image])
             .output()

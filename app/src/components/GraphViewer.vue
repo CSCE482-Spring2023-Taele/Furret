@@ -36,7 +36,8 @@
     },
     created() {
       console.log('created hook called');
-      import(`raw-loader!../assets/${this.outputFilePath}`).then(module => {
+      console.log(this.outputFilePath);
+      import(`raw-loader!../../src-tauri/resources/outputs/${this.outputFilePath}`).then(module => {
         return module.default;
       }).then(fileContent => {
         let userData = [];

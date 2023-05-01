@@ -115,7 +115,7 @@ import Database from "tauri-plugin-sql-api";
 //import { invoke } from '@tauri-apps/api/tauri';
 
 const mytrack = new Audio(sound);
-// const invoke = window.__TAURI__.invoke;
+//const invoke = window.__TAURI__.invoke;
 mytrack.crossOrigin = 'anonymous';
 
 export default {
@@ -174,6 +174,7 @@ export default {
     },
     */
     async uploadResult() {
+      /*
       const selected = await open({
         multiple: true,
         filters: [{
@@ -186,8 +187,8 @@ export default {
         const db = await Database.load("sqlite:data.db");
         let filename = "error.txt"
         invoke('upload_processor', { inputAudio: selected[0], inputImage: this.path.path}).then((message) => {
-          fname = message.split("\n").at(-1).replace(/(\r\n|\n|\r)/gm, "");
-          filename = message+".txt"; 
+          let fname = message.split("\n").at(-2).replace(/(\r\n|\n|\r)/gm, "");
+          filename = fname+".txt"; 
           import('raw-loader!../../src-tauri/resources/outputs/' + filename).then(module => {
             return module.default;
           }).then(fileContent => {
@@ -200,15 +201,37 @@ export default {
                }
             }) 
           });
+        db.execute("INSERT INTO scores_table (song, score, scorefile) VALUES(" + this.songid.songid + ", " + this.score + ", '" + filename + "');"); 
         });
         console.log("multiple");
       } else if (selected === null) {
         // user cancelled the selection
         console.log("cancelled");
+        const db = await Database.load("sqlite:data.db");
+        console.log(db.select("SELECT * FROM scores_table;"));
       } else {
         // user selected a single file
         console.log("single");
       }
+      */
+      let filename = "1682912737.txt";
+        const db = await Database.load("sqlite:data.db");
+        console.log(db.select("SELECT * FROM scores_table;"));
+          import('raw-loader!../../src-tauri/resources/outputs/' + filename).then(module => {
+            return module.default;
+          }).then(fileContent => {
+           fileContent.split('\n').forEach(element => {
+               let val0 = element.split(' ')[0];
+               let score = element.split(' ')[3];
+               if (val0 === "Similarity") {
+                  this.score = Math.round(score * 1000);    
+                  db.execute("INSERT INTO scores_table (song, score, scorefile) VALUES(" + this.songid.songid + ", " + this.score + ", '" + filename + "');"); 
+               }
+            }) 
+          });
+        //const db = await Database.load("sqlite:data.db");
+        console.log(db.select("SELECT * FROM scores_table;"))
+
     },
     async setHighScore() {
       const db = await Database.load("sqlite:data.db");
