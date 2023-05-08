@@ -42,6 +42,10 @@ import Database from "tauri-plugin-sql-api";
     mounted() {
     },
     methods: {
+      /**
+       * Asynchronous function that always fetches the latest played song by user from the database
+       * @public This is a public method
+       */
       async updatelatestplay() {
         this.scoreList = [];
         this.x = [];
@@ -156,3 +160,11 @@ import Database from "tauri-plugin-sql-api";
   width: 100%;
 }
 </style>
+
+<docs>
+  HomeComponent renders the home page of Virtualoso. It contains a welcome message and displays the latest played song by user.
+
+```jsx
+<HomeComponent />
+```
+</docs>

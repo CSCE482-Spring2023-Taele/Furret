@@ -159,12 +159,24 @@ export default {
     this.getSongData();
   },
   methods: {
+    /**
+     * On click function that swaps between home page and song page based on song ID
+     * @param {string} pagename
+     * @public This is a public method
+     */
     swapPage: function(pagename) {
       this.songid = { songid: null }
       this.songname = { songname: null }
       window.location.href = '#/' + pagename
       this.pathMainScreen = {path: null}
     },
+    /**
+     * Sets song ID of page to render correct song page with song name, sheet music, etc.
+     * @param {string} sid
+     * @param {string} sname
+     * @param {string} pathSongScreen
+     * @public This is a public method
+     */
     setSongId: function(sid, sname, pathSongScreen) {
       this.songid = { songid: sid }
       this.songname = { songname: sname}
@@ -172,12 +184,20 @@ export default {
       this.pathMainScreen = {path: pathSongScreen}
       this.component_reload++;
     },
+    /**
+     * Takes user back to home page
+     * @public This is a public method
+     */
     goHome() {
       this.songid = { songid: null }
       this.songname = { songname: null }
       window.location.href = '#/'
       this.pathMainScreen = {path: null}
     },
+    /**
+     * On click function that takes in sheet music as png, jpeg, or jpg, adds it to a local file directory, and calls uploadNewSong to add file name to database
+     * @public This is a public method
+     */
     async handleSheetMusicImport() {
       /*
       this.isSelecting = true;
@@ -222,7 +242,15 @@ export default {
         console.log("single");
       }
     },
+    /**
+     * Handles import of MusicXML if needed
+     * @public This is a public method
+     */
     async handleMusicXMLImport() {},
+    /**
+     * Fetches all song names from songs_table in database to render onto side panel
+     * @public This is a public method
+     */
     async getSongData() {
       console.log("testing testing");
       const db = await Database.load("sqlite:data.db");
@@ -237,6 +265,12 @@ export default {
       console.log(q_result);
       return "";
     },
+    /**
+     * Takes a song name and path and stores in database
+     * @param {string} newSongName
+     * @param {string} newSongPath
+     * @public This is a public method
+     */
     async uploadNewSong(newSongName, newSongPath) {
       const db = await Database.load("sqlite:data.db");
       console.log(newSongPath);
@@ -246,3 +280,9 @@ export default {
   },
 }
 </script>
+
+<docs>
+  MainScreen is the side bar rendered on the left side of the app. It contains all of the song pages for users to enter
+  as well as buttons for users to upload sheet music and MusicXML files.
+
+</docs>

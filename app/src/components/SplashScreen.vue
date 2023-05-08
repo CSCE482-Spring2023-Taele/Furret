@@ -14,7 +14,13 @@
 <script>
     export default {
         name: "LoadingScreen",
-        props: ["isLoading"],
+        
+        props: {
+            /**
+             * Determines when to fade out the loading screen
+             */
+            isLoading: Boolean,
+        },
         data() {
             return {
                 musicFact: [],
@@ -36,7 +42,7 @@
             let min = Math.ceil(0);
             let max = Math.floor(this.musicFact.length);
             this.randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-            console.log(this.musicFact.length);
+            // console.log(this.musicFact.length);
         }
     };
 </script>
@@ -75,3 +81,8 @@ to {
     width: 100%;
 }
 </style>
+
+<docs>
+LoadingScreen is the component that handles the loading screen that is seen initially when you load Virtualoso.
+It contains the Virtualoso logo, the app name, and a music fun fact.
+</docs>

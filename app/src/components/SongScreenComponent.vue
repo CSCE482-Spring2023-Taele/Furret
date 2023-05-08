@@ -121,8 +121,17 @@ mytrack.crossOrigin = 'anonymous';
 export default {
   name: 'SongScreenComponent',
   props: {
+    /**
+     * Receives song ID from MainScreen
+     */
      songid: Number,
+     /**
+     * Receives song name from MainScreen
+     */
      songname: String,
+     /**
+     * Receives path of sheet music file from MainScreen
+     */
      path: String
   },
   components: {
@@ -148,6 +157,10 @@ export default {
     this.sname = this.songname.songname;
   },
   methods: {
+    /**
+     * On click function that toggles between a view of song score results and sheet music file
+     * @public This is a public method
+     */
     toggle(){
       if (this.component.name === "SheetMusicViewer") {
         this.component = ResultsTable;
@@ -173,6 +186,10 @@ export default {
       }
     },
     */
+   /**
+     * Asynchronous function that uploads song name, score, and score file into database
+     * @public This is a public method
+     */
     async uploadResult() {
       /*
       const selected = await open({
@@ -233,6 +250,10 @@ export default {
         console.log(db.select("SELECT * FROM scores_table;"))
 
     },
+    /**
+     * Asynchronous function that sets highest score of this sheet music and renders it on SongScreenComponent
+     * @public This is a public method
+     */
     async setHighScore() {
       const db = await Database.load("sqlite:data.db");
       db.select("SELECT MAX(score) FROM scores_table WHERE song = '" + this.songid.songid + "';").then((response) => {
@@ -242,6 +263,10 @@ export default {
         console.log(response)
       });
     },
+    /**
+     * Asynchronous function that updates name of song in database and re-renders name change on SongScreenComponent
+     * @public This is a public method
+     */
     async rename() {
       let newName = this.sname;
       console.log(newName);
@@ -251,6 +276,10 @@ export default {
       window.location.href = '#/';
       location.reload();
     },
+    /**
+     * Asynchronous function that deletes this song from database
+     * @public This is a public method
+     */
     async remove() {
       const db = await Database.load("sqlite:data.db");
       db.execute("DELETE FROM songs_table WHERE song_id = '" + this.songid.songid + "'");
@@ -274,3 +303,11 @@ export default {
   justify-content: center;
 }
 </style>
+
+<docs>
+  SongScreenComponent is the component rendered for each song. It is accessible via the song names on the left side bar
+  and shows a view of the Song name, highest score for this song based on previous audio recording uploads, has a button for
+  audio upload, a button to toggle between sheet music viewer and result viewer components, and handles rename and deletion of song.
+  This component is the overarching component for all actions related to a specific song, including audio upload, sheet music viewer, results viewer, and rename and deletion.
+
+</docs>

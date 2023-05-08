@@ -46,12 +46,19 @@ export default {
       outputFilePath: ""
     }),
     props: {
+      /**
+       * Receives song ID from SongScreenComponent to fetch song scores and render them
+       */
        songid: Number,
     },
     mounted() {
       this.getSongScores();
     },
     methods: {
+      /**
+       * Fetches song scores from database using song ID
+       * @public This is a public method
+       */
       async getSongScores() {
         const db = await Database.load("sqlite:data.db");
         //db.select("SELECT * FROM scores_table;").then((response) => console.log(response));
@@ -65,6 +72,11 @@ export default {
         console.log(q_result);
 
       },
+      /**
+       * On click function that renders GraphViewer through a modal by passing it the file name of output.txt
+       * @param {string} ofilename
+       * @public This is a public method
+       */
       showModal(ofilename) {
         console.log(this.scores);
         console.log(ofilename); 
@@ -72,6 +84,10 @@ export default {
         this.graphKey++;
         this.outputFilePath = ofilename; // change this to pull from database
       },
+      /**
+       * On click function to close modal
+       * @public This is a public method
+       */
       closeModal() {
         this.isModalVisible = false;
       }
@@ -97,3 +113,9 @@ td:hover {
   background-color: #555756;
 }
 </style>
+
+<docs>
+  ResultsTable is the component that renders the table with all song scores of a specific sheet music in SongScreenComponent.
+  It takes in song ID from SongScreenComponent, fetches the song ID from database, and displays it in a table. 
+
+</docs>

@@ -37,3 +37,11 @@ export default {
   }
 }
 </script>
+
+<docs>
+  Method: toggleTheme():
+  On click function that toggles between custom light mode and dark mode.
+
+  Settings page is the component that handles the change of themes within the app.
+
+</docs>
